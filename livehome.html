@@ -1,810 +1,668 @@
-<!doctype html>
-<html lang="mg">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Asa En Live — Asa En Ligne</title>
-  <style>
-    :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --secondary: #64748b;
-      --accent: #f1f5f9;
-      --background: #f8fafc;
-      --surface: #ffffff;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --radius: 12px;
-      --transition: all 0.2s ease-in-out;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--background);
-      color: var(--text);
-      line-height: 1.6;
-      font-size: 16px;
-    }
-
-    /* Header */
-    header {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      padding: 1rem 1.25rem;
-      box-shadow: var(--shadow);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    header h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.025em;
-    }
-
-    /* Navigation */
-    .back-link {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      padding: 0.5rem 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .back-link:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: translateY(-1px);
-    }
-
-    /* Settings in Header */
-    .header-settings {
-      position: relative;
-      display: inline-block;
-    }
-
-    .settings-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      border-radius: 8px;
-      padding: 0.75rem;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      font-size: 1.25rem;
-    }
-
-    .settings-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-1px);
-    }
-
-    .settings-dropdown {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: var(--surface);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-lg);
-      min-width: 280px;
-      margin-top: 0.5rem;
-      padding: 0.5rem 0;
-      z-index: 101;
-      display: none;
-      border: 1px solid var(--border);
-    }
-
-    .settings-dropdown.active {
-      display: block;
-      animation: fadeIn 0.2s ease-out;
-    }
-
-    .dropdown-item {
-      padding: 0.75rem 1rem;
-      color: var(--text);
-      text-decoration: none;
-      display: block;
-      transition: var(--transition);
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
-    }
-
-    .dropdown-item:last-child {
-      border-bottom: none;
-    }
-
-    .dropdown-item:hover {
-      background: var(--accent);
-      color: var(--primary);
-    }
-
-    .dropdown-section {
-      font-weight: 600;
-      color: var(--primary);
-      background: var(--accent);
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    /* Container & Cards */
-    .container {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1.25rem;
-    }
-
-    .card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      box-shadow: var(--shadow);
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--border);
-      transition: var(--transition);
-    }
-
-    .card:hover {
-      box-shadow: var(--shadow-lg);
-    }
-
-    /* Video Section */
-    .video-section h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: var(--text);
-    }
-
-    .video-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .player {
-      width: 100%;
-      background: #000;
-      border-radius: var(--radius);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .player iframe, 
-    .player video {
-      width: 100%;
-      height: 520px;
-      border: 0;
-      display: block;
-    }
-
-    .player-placeholder {
-      padding: 3rem;
-      text-align: center;
-      color: var(--text-muted);
-      background: var(--accent);
-      border-radius: var(--radius);
-    }
-
-    /* Reactions */
-    .reactions {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-      margin-top: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .react-btn {
-      background: var(--accent);
-      border-radius: 999px;
-      padding: 0.75rem 1.25rem;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 500;
-    }
-
-    .react-btn:hover {
-      background: var(--primary);
-      color: white;
-      transform: translateY(-2px);
-    }
-
-    .video-meta {
-      margin-left: auto;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    /* Comments */
-    .comments-section {
-      margin-top: 1.5rem;
-    }
-
-    .comments-section h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-
-    .comment-form {
-      display: flex;
-      gap: 0.75rem;
-      align-items: flex-start;
-      margin-bottom: 1.5rem;
-    }
-
-    .comment-input {
-      flex: 1;
-      padding: 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      font-family: inherit;
-      font-size: 0.875rem;
-      transition: var(--transition);
-      resize: vertical;
-      min-height: 44px;
-    }
-
-    .comment-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    }
-
-    .post-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: var(--radius);
-      padding: 0.75rem 1.5rem;
-      cursor: pointer;
-      font-weight: 500;
-      transition: var(--transition);
-    }
-
-    .post-btn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-1px);
-    }
-
-    .comment {
-      padding: 1rem;
-      border-bottom: 1px solid var(--border);
-      animation: fadeIn 0.3s ease-out;
-    }
-
-    .comment:last-child {
-      border-bottom: none;
-    }
-
-    .comment-meta {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .comment strong {
-      color: var(--text);
-    }
-
-    /* Accordion */
-    .accordion {
-      width: 100%;
-    }
-
-    .accordion-btn {
-      width: 100%;
-      text-align: left;
-      padding: 1rem 1.25rem;
-      border: none;
-      background: var(--accent);
-      font-weight: 600;
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .accordion-btn:hover {
-      background: var(--primary);
-      color: white;
-    }
-
-    .accordion-btn::after {
-      content: "▼";
-      font-size: 0.75rem;
-      transition: var(--transition);
-    }
-
-    .accordion-btn.active::after {
-      transform: rotate(180deg);
-    }
-
-    .accordion-panel {
-      padding: 1.25rem;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      display: none;
-    }
-
-    .accordion-panel:last-child {
-      border-bottom: none;
-    }
-
-    .accordion-panel.active {
-      display: block;
-    }
-
-    .accordion-panel ul {
-      padding-left: 1.5rem;
-      margin: 1rem 0;
-    }
-
-    .accordion-panel li {
-      margin-bottom: 0.5rem;
-    }
-
-    .accordion-panel h4 {
-      margin: 1rem 0 0.5rem 0;
-      color: var(--text);
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .container {
-        margin: 1rem auto;
-        padding: 0 1rem;
-      }
-      
-      .card {
-        padding: 1.25rem;
-      }
-      
-      .player iframe, 
-      .player video {
-        height: 300px;
-      }
-      
-      .header-content {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .comment-form {
-        flex-direction: column;
-      }
-      
-      .post-btn {
-        width: 100%;
-      }
-      
-      .reactions {
-        justify-content: space-between;
-      }
-      
-      .video-meta {
-        margin-left: 0;
-        width: 100%;
-        text-align: center;
-        margin-top: 0.5rem;
-      }
-
-      .settings-dropdown {
-        right: -50px;
-        min-width: 250px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .player iframe, 
-      .player video {
-        height: 200px;
-      }
-      
-      header h1 {
-        font-size: 1.25rem;
-      }
-      
-      .react-btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.875rem;
-      }
-
-      .settings-dropdown {
-        right: -80px;
-        min-width: 220px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamorona - Création de Site Web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .site-types {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .site-type {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            width: 300px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 3px solid transparent;
+        }
+        
+        .site-type:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .site-type.selected {
+            border-color: #2575fc;
+            background-color: #f0f7ff;
+        }
+        
+        .site-type i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #2575fc;
+        }
+        
+        .site-type h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .site-type p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        .selection-badge {
+            background-color: #2575fc;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+        
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #2575fc;
+            outline: none;
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            font-weight: 600;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(37, 117, 252, 0.2);
+        }
+        
+        .submit-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .notification-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+        
+        .notification-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+        
+        .notification-area {
+            min-height: 100px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px dashed #dee2e6;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+        }
+        
+        .notification-area.has-message {
+            border: 2px solid #d4edda;
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .notification-area.has-error {
+            border: 2px solid #f8d7da;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .messages-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .messages-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+        
+        .messages-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .message-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #2575fc;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .message-type {
+            background-color: #6a11cb;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .message-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .message-email {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .message-content {
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .no-messages {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 40px 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .success-icon {
+            color: #28a745;
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+        
+        .error-icon {
+            color: #dc3545;
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 1px solid #e1e8ed;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .site-types {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .site-type {
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .form-container, .notification-section, .messages-container {
+                padding: 25px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="header-content">
-      <h1>Asa En Live — Asa En Ligne</h1>
-      <nav style="display: flex; align-items: center; gap: 1rem;">
-        <a href="index.html" class="back">← Retour</a>
-        <div class="header-settings">
-          <button class="settings-btn" id="openSettings" title="Paramètres">
-            ⚙️
-          </button>
-          <div class="settings-dropdown" id="settingsDropdown">
-            <div class="dropdown-section">Information</div>
-            <a class="dropdown-item" href="#" data-target="infoPanel">Information du plateforme</a>
-            <a class="dropdown-item" href="#" data-target="faqPanel">FAQ</a>
-            <div class="dropdown-section">Compte</div>
-            <a class="dropdown-item" href="index.html" id="logoutBtn">Se déconnecter</a>
-            <a href="index.html" class="back">← Retour</a>
-          </div>
-        </div>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="card video-section" id="liveSection">
-      <h2 id="liveTitle">Video Live</h2>
-      <div class="video-wrap">
-        <div class="player" id="playerContainer">
-          <div class="player-placeholder">
-            Tsy mbola misy vidéo nalefa — mba miandrasa na mifidiana vidéo amin'ny admin.
-          </div>
-        </div>
-
-        <div class="reactions" id="reactionsBar" style="display:none">
-          <button class="react-btn" data-type="like">
-            👍 <span id="likeCount">0</span>
-          </button>
-          <button class="react-btn" data-type="love">
-            ❤️ <span id="loveCount">0</span>
-          </button>
-          <button class="react-btn" data-type="clap">
-            👏 <span id="clapCount">0</span>
-          </button>
-          <div class="video-meta">
-            Zavatra: <span id="videoDescShort"></span>
-          </div>
-        </div>
-
-        <div class="comments-section card" id="commentsArea" style="display:none">
-          <h3>Comments</h3>
-          <div class="comment-form">
-            <input type="text" id="commentName" class="comment-input" placeholder="Anarana (azo atao tsy asiana)">
-            <textarea id="commentText" class="comment-input" placeholder="Soraty eto ny hevitrao..." rows="2"></textarea>
-            <button id="postComment" class="post-btn">Send</button>
-          </div>
-          <div id="commentsList"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="card accordion">
-      <button type="button" class="accordion-btn" data-acc="#infoPanel">
-        1. Information du plateforme
-      </button>
-      <div id="infoPanel" class="accordion-panel">
-        <p>
-          Ity sehatra "Asa En Live" ity dia natao ho an'ny fampisehoana mivantana amin'ny alalan'ny vidéo sy ny fizarana fampahalalana momba ny asa :
-        </p>
-        <ul>
-          <li>Ny admin (mpikarakara) no mampiditra vidéo na mampiditra lien vidéo ao amin'ny adminlive.html.</li>
-          <li>Ny mpitsidika afaka mijery ny vidéo ary manoratra commentaire eo ambany sy mamaly ireo commentaire hafa.</li>
-          <li>Reactions (like, love, clap) azo ampiasaina hisolo hevitra fanehoan-kevitra haingana.</li>
-          <li>Ny vidéo azo atao avy amin'ny link (Youtube/Embed) na avy amin'ny Firebase Storage rehefa ampidirin'ny admin.</li>
-          <li>Ny rafitra commentaire sy réactions dia voatahiry ao amin'ny Firebase Realtime Database (na Firestore raha tianao ovaina).</li>
-          <li>Ho an'ny fanovana / famafana vidéo dia afaka miditra amin'ny pejin'ny admin (adminlive.html) ny admin.</li>
-        </ul>
-      </div>
-
-      <button type="button" class="accordion-btn" data-acc="#faqPanel">
-        2. FAQ
-      </button>
-      <div id="faqPanel" class="accordion-panel">
-        <h4>Ahoana no fomba handefasana vidéo?</h4>
-        <p>Ny admin ihany no afaka mandefa video amin'ny alalan'ny pejy adminlive.html: misafidy titre, lien na mampakatra vidéo avy ao amin'ny storage, manome fanazavana, ary manindry "Ajouter".</p>
-
-        <h4>Afaka mametraka commentaire ve ny mpampiasa tsy misy kaonty?</h4>
-        <p>Eny, azo ekena ny commentaire tsotra; raha mila rafitra miavaka kokoa dia azo ampiana authentication (Firebase Auth) amin'ny ho avy.</p>
-
-        <h4>Inona no atao raha te-hamafa vidéo?</h4>
-        <p>Ny admin dia afaka mamafa ny vidéo ao amin'ny adminlive.html amin'ny bokotra "Supprimer"; io dia hanala azy eo amin'ny pejy fandraisana (live).</p>
-      </div>
-
-      <button type="button" class="accordion-btn" data-acc="#contactPanel">
-        3. Retour à la page d'accueil
-      </button>
-      <div id="contactPanel" class="accordion-panel">
-        <p>Tongava miverina ao amin'ny <a href="/index.html" style="color: var(--primary); text-decoration: none; font-weight: 500;">pejy voalohany</a> raha te-hijery ny tolotra hafa.</p>
-      </div>
-    </section>
-  </main>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script>
-    // Firebase config (tsy ovaina, avy amin'ny anao)
-    const firebaseConfig = {
-      apiKey: "AIzaSyBtq50XttR1S-f9RMo0otxx5jrRiY30QEE",
-      authDomain: "miasamada-4f90a.firebaseapp.com",
-      databaseURL: "https://miasamada-4f90a-default-rtdb.firebaseio.com",
-      projectId: "miasamada-4f90a",
-      storageBucket: "miasamada-4f90a.firebasestorage.app",
-      messagingSenderId: "341483369374",
-      appId: "1:341483369374:web:721451eb0df21d4ef45c8f",
-      measurementId: "G-XTH1TCS8H4"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    // Helpers
-    function isYouTubeLink(url){return /youtube\.com|youtu\.be/.test(url)}
-
-    // Load latest live video (adminlive.html should push under /liveVideos with key and fields: title, link, description, timestamp, reactions{like:0,...})
-    function loadLatestVideo(){
-      const ref = db.ref('liveVideos').orderByChild('timestamp').limitToLast(1);
-      ref.on('value', snap=>{
-        const data = snap.val();
-        if(!data){
-          document.getElementById('playerContainer').innerHTML = '<div class="player-placeholder">Tsy mbola misy vidéo nalefa.</div>';
-          document.getElementById('commentsArea').style.display='none';
-          document.getElementById('reactionsBar').style.display='none';
-          return;
-        }
-        const keys = Object.keys(data);
-        const key = keys[0];
-        const video = data[key];
-        renderVideo(key, video);
-      });
-    }
-
-    function renderVideo(id, video){
-      const container = document.getElementById('playerContainer');
-      container.innerHTML = '';
-      // create player depending on link
-      if(video.link && isYouTubeLink(video.link)){
-        // convert to embed
-        let vid = video.link;
-        if(vid.includes('watch?v=')) vid = vid.split('watch?v=')[1].split('&')[0];
-        if(vid.includes('youtu.be/')) vid = vid.split('youtu.be/')[1].split('?')[0];
-        const iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube.com/embed/'+vid+'?rel=0';
-        iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-        iframe.setAttribute('allowfullscreen','');
-        container.appendChild(iframe);
-      } else if(video.link){
-        // assume direct .mp4 link
-        const vidEl = document.createElement('video');
-        vidEl.controls = true;
-        const src = document.createElement('source');
-        src.src = video.link;
-        src.type = 'video/mp4';
-        vidEl.appendChild(src);
-        container.appendChild(vidEl);
-      } else if(video.storageURL){
-        const vidEl = document.createElement('video');
-        vidEl.controls = true;
-        const src = document.createElement('source');
-        src.src = video.storageURL;
-        src.type = 'video/mp4';
-        vidEl.appendChild(src);
-        container.appendChild(vidEl);
-      } else {
-        container.innerHTML = '<div class="player-placeholder">Tsy afaka milalao ity vidéo ity (tsy misy link na storageURL).</div>';
-      }
-
-      document.getElementById('liveTitle').textContent = video.title || 'Video Live';
-      document.getElementById('videoDescShort').textContent = (video.description||'') .slice(0,80);
-      document.getElementById('reactionsBar').style.display='flex';
-      document.getElementById('commentsArea').style.display='block';
-
-      // setup reaction counts
-      const r = video.reactions || {like:0,love:0,clap:0};
-      document.getElementById('likeCount').textContent = r.like||0;
-      document.getElementById('loveCount').textContent = r.love||0;
-      document.getElementById('clapCount').textContent = r.clap||0;
-
-      // load comments
-      listenComments(id);
-
-      // set handlers
-      document.querySelectorAll('.react-btn').forEach(btn=>{
-        btn.onclick = ()=>{
-          const type = btn.getAttribute('data-type');
-          addReaction(id, type);
-        }
-      });
-
-      // post comment
-      document.getElementById('postComment').onclick = ()=>{
-        const name = document.getElementById('commentName').value || 'Anonyme';
-        const text = document.getElementById('commentText').value.trim();
-        if(!text) return alert('Ampidiro ny commentaire azafady.');
-        postComment(id, {name,text,timestamp:Date.now()});
-        document.getElementById('commentText').value='';
-      }
-    }
-
-    // Reactions updater (increment atomically)
-    function addReaction(videoId, type){
-      const rRef = db.ref('liveVideos/'+videoId+'/reactions/'+type);
-      rRef.transaction(current=> (current||0)+1);
-    }
-
-    // Comments
-    function listenComments(videoId){
-      const cRef = db.ref('comments/'+videoId).orderByChild('timestamp');
-      cRef.on('value', snap=>{
-        const list = snap.val() || {};
-        const out = document.getElementById('commentsList');
-        out.innerHTML='';
-        const keys = Object.keys(list);
-        keys.forEach(k=>{
-          const c = list[k];
-          const div = document.createElement('div');
-          div.className='comment';
-          div.innerHTML = `
-            <div class='comment-meta'>
-              <strong>${escapeHtml(c.name||'Anonyme')}</strong>
-              <span>${new Date(c.timestamp).toLocaleString()}</span>
+    <div class="container">
+        <header>
+            <h1>Hamorona Site de Vente</h1>
+            <p>Choisissez le type de site web que vous souhaitez créer et envoyez-nous votre demande. Nous vous répondrons dans les plus brefs délais.</p>
+        </header>
+        
+        <section class="site-types">
+            <div class="site-type" data-type="vitrine">
+                <i class="fas fa-store"></i>
+                <h3>VITRINE</h3>
+                <p>Site web présentant votre entreprise, vos produits ou services de manière professionnelle.</p>
+                <div class="selection-badge hidden">Sélectionné</div>
             </div>
-            <div>${escapeHtml(c.text)}</div>
-          `;
-          out.prepend(div);
-        });
-      });
-    }
-
-    function postComment(videoId, comment){
-      const cRef = db.ref('comments/'+videoId).push();
-      cRef.set(comment);
-    }
-
-    // small utils
-    function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-
-    // Start
-    loadLatestVideo();
-
-    // Settings dropdown functionality
-    const settingsBtn = document.getElementById('openSettings');
-    const settingsDropdown = document.getElementById('settingsDropdown');
-
-    settingsBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      settingsDropdown.classList.toggle('active');
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function() {
-      settingsDropdown.classList.remove('active');
-    });
-
-    // Prevent dropdown from closing when clicking inside it
-    settingsDropdown.addEventListener('click', function(e) {
-      e.stopPropagation();
-    });
-
-    // Dropdown item click handlers
-    document.querySelectorAll('.dropdown-item[data-target]').forEach(item => {
-      item.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('data-target');
+            
+            <div class="site-type" data-type="ecommerce">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>E-COMMERCE</h3>
+                <p>Boutique en ligne complète avec système de paiement, gestion des stocks et panier d'achat.</p>
+                <div class="selection-badge hidden">Sélectionné</div>
+            </div>
+            
+            <div class="site-type" data-type="formation">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>FORMATION EN LIGNE</h3>
+                <p>Plateforme de formation avec gestion des cours, inscriptions et suivi des apprenants.</p>
+                <div class="selection-badge hidden">Sélectionné</div>
+            </div>
+        </section>
         
-        // Close all accordion panels
-        document.querySelectorAll('.accordion-panel').forEach(panel => {
-          panel.classList.remove('active');
+        <section class="form-container">
+            <h2>Demande de création de site web</h2>
+            <form id="site-request-form">
+                <div class="form-group">
+                    <label for="user-name">Votre nom *</label>
+                    <input type="text" id="user-name" class="form-control" required placeholder="Votre nom complet">
+                </div>
+                
+                <div class="form-group">
+                    <label for="selected-site-type">Type de site sélectionné</label>
+                    <input type="text" id="selected-site-type" class="form-control" readonly placeholder="Veuillez sélectionner un type de site ci-dessus">
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-email">Votre adresse email *</label>
+                    <input type="email" id="user-email" class="form-control" required placeholder="votre@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="site-description">Description de votre projet *</label>
+                    <textarea id="site-description" class="form-control" required placeholder="Décrivez en détail le site web que vous souhaitez créer, vos besoins spécifiques, vos préférences de design, etc."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submit-btn" disabled>
+                    <span id="btn-text">Envoyer la demande</span>
+                    <span id="btn-loading" class="hidden"><i class="fas fa-spinner fa-spin"></i> Envoi en cours...</span>
+                </button>
+            </form>
+        </section>
+        
+        <section class="notification-section">
+            <h2>Notifications</h2>
+            <div class="notification-area" id="notification-area">
+                <div id="notification-content">
+                    <i class="fas fa-info-circle" id="notification-icon"></i>
+                    <p id="notification-text">Aucune notification pour le moment. Lorsque nous répondrons à votre demande, la réponse apparaîtra ici.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="messages-container">
+            <h2>Messages envoyés</h2>
+            <div class="messages-list" id="messages-list">
+                <div class="no-messages" id="no-messages">
+                    <i class="fas fa-inbox fa-2x" style="margin-bottom: 15px;"></i>
+                    <p>Aucun message envoyé pour le moment. Les demandes que vous envoyez seront affichées ici.</p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>Hamorona Site de Vente &copy; 2023 - Tous droits réservés</p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialiser EmailJS avec votre Public Key
+        emailjs.init('6zxwsWKKTyWdixCTA');
+        
+        // Variables globales
+        let selectedSiteType = '';
+        let messages = JSON.parse(localStorage.getItem('site_messages')) || [];
+        
+        // Sélection des éléments DOM
+        const siteTypes = document.querySelectorAll('.site-type');
+        const selectedSiteTypeInput = document.getElementById('selected-site-type');
+        const userNameInput = document.getElementById('user-name');
+        const userEmailInput = document.getElementById('user-email');
+        const siteDescriptionInput = document.getElementById('site-description');
+        const submitBtn = document.getElementById('submit-btn');
+        const notificationArea = document.getElementById('notification-area');
+        const notificationContent = document.getElementById('notification-content');
+        const notificationText = document.getElementById('notification-text');
+        const notificationIcon = document.getElementById('notification-icon');
+        const messagesList = document.getElementById('messages-list');
+        const noMessages = document.getElementById('no-messages');
+        const btnText = document.getElementById('btn-text');
+        const btnLoading = document.getElementById('btn-loading');
+        
+        // Initialisation - afficher les messages existants
+        displayMessages();
+        
+        // Gestion de la sélection du type de site
+        siteTypes.forEach(type => {
+            type.addEventListener('click', () => {
+                // Retirer la classe 'selected' de tous les types
+                siteTypes.forEach(t => {
+                    t.classList.remove('selected');
+                    t.querySelector('.selection-badge').classList.add('hidden');
+                });
+                
+                // Ajouter la classe 'selected' au type cliqué
+                type.classList.add('selected');
+                type.querySelector('.selection-badge').classList.remove('hidden');
+                
+                // Mettre à jour la variable et l'input
+                selectedSiteType = type.getAttribute('data-type');
+                selectedSiteTypeInput.value = getSiteTypeName(selectedSiteType);
+                
+                // Activer le bouton de soumission si les champs sont remplis
+                updateSubmitButtonState();
+            });
         });
         
-        // Remove active class from all accordion buttons
-        document.querySelectorAll('.accordion-btn').forEach(btn => {
-          btn.classList.remove('active');
-        });
-        
-        // Open the target accordion panel
-        const targetPanel = document.getElementById(targetId);
-        if (targetPanel) {
-          targetPanel.classList.add('active');
-          const correspondingBtn = document.querySelector(`[data-acc="#${targetId}"]`);
-          if (correspondingBtn) {
-            correspondingBtn.classList.add('active');
-          }
-          
-          // Scroll to the accordion section
-          targetPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Fonction pour obtenir le nom complet du type de site
+        function getSiteTypeName(type) {
+            switch(type) {
+                case 'vitrine': return 'Site Vitrine';
+                case 'ecommerce': return 'Site E-commerce';
+                case 'formation': return 'Site de Formation en Ligne';
+                default: return '';
+            }
         }
         
-        // Close the dropdown
-        settingsDropdown.classList.remove('active');
-      });
-    });
-
-    // Logout button handler
-    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-      e.preventDefault();
-      if (confirm('Tena te-hiala ve ianao?')) {
-        alert('Famaritana: Mbola tsy misy rafitra authentication ampidirina. Ataovy antoka fa manala ny cache/mijery pejy hafa ianao.');
-        // Here you would typically add logout logic when authentication is implemented
-      }
-      settingsDropdown.classList.remove('active');
-    });
-
-    // Accordion behavior
-    document.querySelectorAll('.accordion-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const sel = btn.getAttribute('data-acc');
-        const panel = document.querySelector(sel);
-        
-        // Toggle current panel
-        const isActive = panel.classList.contains('active');
-        document.querySelectorAll('.accordion-panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.accordion-btn').forEach(b => b.classList.remove('active'));
-        
-        if (!isActive) {
-          panel.classList.add('active');
-          btn.classList.add('active');
+        // Mettre à jour l'état du bouton de soumission
+        function updateSubmitButtonState() {
+            const nameValid = userNameInput.value.trim() !== '';
+            const emailValid = userEmailInput.value.trim() !== '';
+            const descriptionValid = siteDescriptionInput.value.trim() !== '';
+            submitBtn.disabled = !(selectedSiteType && nameValid && emailValid && descriptionValid);
         }
-      });
-    });
-
-    // Listen for changes to the latest video's reactions and update counts live
-    const latestReactionsRef = db.ref('liveVideos');
-    latestReactionsRef.on('child_changed', snap=>{
-      // if reactions changed, reload
-      const video = snap.val();
-      // try to update counts if visible
-      if(video && video.reactions){
-        document.getElementById('likeCount').textContent = video.reactions.like||0;
-        document.getElementById('loveCount').textContent = video.reactions.love||0;
-        document.getElementById('clapCount').textContent = video.reactions.clap||0;
-      }
-    });
-
-  </script>
+        
+        // Écouter les changements dans les champs
+        userNameInput.addEventListener('input', updateSubmitButtonState);
+        userEmailInput.addEventListener('input', updateSubmitButtonState);
+        siteDescriptionInput.addEventListener('input', updateSubmitButtonState);
+        
+        // Gestion de la soumission du formulaire
+        document.getElementById('site-request-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Afficher l'indicateur de chargement
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            submitBtn.disabled = true;
+            
+            // Récupérer les données du formulaire
+            const formData = {
+                name: userNameInput.value.trim(), // ((name)) ao amin'ny template
+                title: getSiteTypeName(selectedSiteType), // ((title)) ao amin'ny template
+                email: userEmailInput.value.trim(), // ((email)) ao amin'ny template
+                message: siteDescriptionInput.value.trim(), // ((message)) ao amin'ny template
+                date: new Date().toLocaleString('fr-FR'),
+                timestamp: new Date().getTime()
+            };
+            
+            try {
+                // Envoyer l'email via EmailJS - MIARAKA AMIN'NY VARIABLES MIJERY NY TEMPLATE-NAO
+                console.log('Envoi de l\'email avec les variables suivantes:');
+                console.log('- name:', formData.name);
+                console.log('- title:', formData.title);
+                console.log('- email:', formData.email);
+                console.log('- message:', formData.message);
+                
+                const response = await emailjs.send(
+                    'service_y207nno', // Service ID
+                    'template_ppeaule', // Template ID
+                    {
+                        name: formData.name, // ((name)) ao amin'ny template
+                        title: formData.title, // ((title)) ao amin'ny template
+                        email: formData.email, // ((email)) ao amin'ny template - IZAO NO HAMERINA NY VALINY AMIN'NY MPAMPIASA!
+                        message: formData.message, // ((message)) ao amin'ny template
+                        date: formData.date
+                        // NOTE: Ao amin'ny template-nao, ny "Répondre à" dia tokony ho "((email))"
+                        // Ka rehefa manao "Répondre" ianao dia ho any amin'ilay mpampiasa ny valiny!
+                    }
+                );
+                
+                console.log('Email envoyé avec succès:', response);
+                
+                // Sauvegarder le message localement
+                saveMessage(formData);
+                
+                // Afficher la notification de succès
+                showNotification('Votre demande a été envoyée avec succès! Nous vous répondrons dans les plus brefs délais. La réponse ira à votre email: ' + formData.email, 'success');
+                
+                // Réinitialiser le formulaire
+                resetForm();
+                
+            } catch (error) {
+                console.error('Erreur lors de l\'envoi de l\'email:', error);
+                
+                // Sauvegarder le message localement même en cas d'erreur d'envoi
+                saveMessage(formData);
+                
+                // Préparer le message d'erreur
+                let errorMessage = 'Votre demande a été enregistrée localement. ';
+                
+                if (error.status === 0) {
+                    errorMessage += 'Erreur de connexion. Vérifiez votre connexion internet.';
+                } else if (error.text) {
+                    errorMessage += `Erreur: ${error.text}`;
+                } else {
+                    errorMessage += 'Une erreur est survenue lors de l\'envoi de l\'email.';
+                }
+                
+                showNotification(errorMessage, 'error');
+                
+                // Réinitialiser le formulaire
+                resetForm();
+            } finally {
+                // Masquer l'indicateur de chargement
+                btnText.classList.remove('hidden');
+                btnLoading.classList.add('hidden');
+            }
+        });
+        
+        // Sauvegarder le message localement
+        function saveMessage(messageData) {
+            messages.push(messageData);
+            localStorage.setItem('site_messages', JSON.stringify(messages));
+            displayMessages();
+        }
+        
+        // Afficher les messages
+        function displayMessages() {
+            if (messages.length === 0) {
+                noMessages.classList.remove('hidden');
+                return;
+            }
+            
+            noMessages.classList.add('hidden');
+            messagesList.innerHTML = '';
+            
+            // Afficher les messages du plus récent au plus ancien
+            messages.slice().reverse().forEach((message, index) => {
+                const messageCard = document.createElement('div');
+                messageCard.className = 'message-card';
+                
+                messageCard.innerHTML = `
+                    <div class="message-header">
+                        <span class="message-type">${message.title}</span>
+                        <span class="message-date">${message.date}</span>
+                    </div>
+                    <div class="message-email">${message.name} (${message.email})</div>
+                    <div class="message-content">${message.message}</div>
+                `;
+                
+                messagesList.appendChild(messageCard);
+            });
+        }
+        
+        // Afficher une notification
+        function showNotification(message, type = 'info') {
+            notificationText.textContent = message;
+            
+            // Mettre à jour le style selon le type
+            notificationArea.classList.remove('has-message', 'has-error');
+            notificationIcon.className = 'fas';
+            
+            if (type === 'success') {
+                notificationArea.classList.add('has-message');
+                notificationIcon.className = 'fas fa-check-circle success-icon';
+                notificationText.innerHTML = `<strong>Succès!</strong> ${message}`;
+            } else if (type === 'error') {
+                notificationArea.classList.add('has-error');
+                notificationIcon.className = 'fas fa-exclamation-circle error-icon';
+                notificationText.innerHTML = `<strong>Erreur!</strong> ${message}`;
+            } else {
+                notificationIcon.className = 'fas fa-info-circle';
+            }
+            
+            // Faire défiler jusqu'à la section notification
+            notificationArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        // Réinitialiser le formulaire
+        function resetForm() {
+            // Réinitialiser la sélection
+            siteTypes.forEach(type => {
+                type.classList.remove('selected');
+                type.querySelector('.selection-badge').classList.add('hidden');
+            });
+            
+            selectedSiteType = '';
+            selectedSiteTypeInput.value = '';
+            userNameInput.value = '';
+            userEmailInput.value = '';
+            siteDescriptionInput.value = '';
+            
+            // Désactiver le bouton
+            submitBtn.disabled = true;
+        }
+        
+        // Simuler une réponse de l'administrateur
+        function simulateAdminResponse() {
+            const responses = [
+                "Merci pour votre demande de site web. Nous l'avons bien reçue et nous vous contacterons sous 48h pour discuter des détails de votre projet.",
+                "Votre projet de site e-commerce a retenu notre attention. Nous vous proposons un rendez-vous téléphonique cette semaine pour en discuter.",
+                "Nous avons bien pris en compte votre demande de site vitrine. Notre équipe de design travaille déjà sur des propositions adaptées à votre secteur.",
+                "Bonjour, merci pour votre intérêt pour nos services de formation en ligne. Nous reviendrons vers vous avec un devis personnalisé dans les prochains jours."
+            ];
+            
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            showNotification(`Réponse de l'administrateur (simulation): ${randomResponse}`, 'success');
+        }
+        
+        // Pour la démonstration, simuler une réponse après l'envoi d'un message
+        document.getElementById('site-request-form').addEventListener('submit', () => {
+            // Simuler une réponse après 3 secondes
+            setTimeout(() => {
+                simulateAdminResponse();
+            }, 3000);
+        });
+        
+        // Tester la connexion à EmailJS au chargement
+        window.addEventListener('load', () => {
+            console.log('EmailJS initialisé avec Public Key: 6zxwsWKKTyWdixCTA');
+            console.log('Service ID configuré: service_y207nno');
+            console.log('Template ID configuré: template_ppeaule');
+            
+            // Afficher un message de bienvenue
+            showNotification('Formulaire prêt à l\'emploi. Sélectionnez un type de site et remplissez le formulaire.', 'info');
+        });
+    </script>
 </body>
 </html>
