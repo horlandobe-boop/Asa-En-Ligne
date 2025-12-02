@@ -6,6 +6,10 @@
     <title>ASA EN LIGNE - Assistant Intelligent</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <style>
         :root {
             --primary-color: #2c5aa0;
@@ -555,6 +559,42 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Firebase Status */
+        .firebase-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .status-connected {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .status-disconnected {
+            background: #fed7d7;
+            color: #e53e3e;
+        }
+
         /* Scrollbar styling */
         .chat-messages::-webkit-scrollbar {
             width: 6px;
@@ -623,7 +663,7 @@
             <p>Posez vos questions et obtenez des réponses instantanées</p>
             <div class="status-indicator">
                 <div class="status-dot"></div>
-                En ligne - Prêt à vous aider
+                <span id="connectionStatus">Connexion en cours...</span>
             </div>
             
             <div class="mode-switch">
@@ -650,7 +690,7 @@
                 </div>
 
                 <div class="question-buttons" id="questionButtons">
-                    <!-- Les boutons de questions seront générés dynamiquement -->
+                    <div class="spinner" id="loadingSpinner"></div>
                 </div>
             </div>
         </div>
@@ -660,6 +700,9 @@
             <div class="admin-header">
                 <h2 class="admin-title">
                     <i class="fas fa-user-shield"></i> Administration des Questions
+                    <span id="firebaseStatus" class="firebase-status status-connected">
+                        <i class="fas fa-circle" style="font-size: 8px;"></i> Firebase Connecté
+                    </span>
                 </h2>
                 <div class="admin-actions">
                     <button class="admin-btn btn-secondary" id="backToUserBtn">
@@ -702,10 +745,10 @@
             <div class="questions-list">
                 <h3>
                     <i class="fas fa-list"></i> Liste des Questions
-                    <span id="questionsCount" class="status-indicator" style="font-size: 0.8rem; margin-left: 10px;"></span>
+                    <span id="questionsCount" class="status-indicator" style="font-size: 0.8rem; margin-left: 10px;">0 questions</span>
                 </h3>
                 <div id="questionsList">
-                    <!-- Les questions seront chargées ici -->
+                    <div class="spinner" id="adminLoadingSpinner"></div>
                 </div>
             </div>
         </div>
@@ -733,7 +776,7 @@
                 </button>
             </div>
             <p style="margin-top: 20px; font-size: 0.9rem; color: #666; text-align: center;">
-                Mot de passe par défaut: <strong>adminxxx</strong>
+                Mot de passe: <strong>seulement les administrateurs</strong>
             </p>
         </div>
     </div>
@@ -750,21 +793,38 @@
     </audio>
 
     <script>
+        // ===== CONFIGURATION FIREBASE =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyBtq50XttR1S-f9RMo0otxx5jrRiY30QEE",
+            authDomain: "miasamada-4f90a.firebaseapp.com",
+            databaseURL: "https://miasamada-4f90a-default-rtdb.firebaseio.com",
+            projectId: "miasamada-4f90a",
+            storageBucket: "miasamada-4f90a.firebasestorage.app",
+            messagingSenderId: "341483369374",
+            appId: "1:341483369374:web:721451eb0df21d4ef45c8f",
+            measurementId: "G-XTH1TCS8H4"
+        };
+
+        // ===== INITIALISATION FIREBASE =====
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const auth = firebase.auth();
+
         // Configuration EmailJS
         emailjs.init("LE7QYti5hRGIfM31l");
 
-        // Données initiales (questions par défaut)
+        // Données initiales (questions par défaut si Firebase vide)
         const defaultQuestions = [
-            { id: 1, question: "Quels sont vos services?", response: "Nous proposons des solutions de développement web, création d'applications, et assistance technique." },
-            { id: 2, question: "Comment puis-je commander un site web?", response: "Vous pouvez commander un site web en nous contactant au 0323911654." },
-            { id: 3, question: "Quels sont vos tarifs?", response: "Nos tarifs varient selon le projet. Contactez-nous pour un devis personnalisé." },
-            { id: 4, question: "Dans quelles régions intervenez-vous?", response: "Nous intervenons principalement dans la région SAVA, mais pouvons travailler à distance partout à Madagascar." },
-            { id: 5, question: "Quel est votre délai de livraison?", response: "Le délai dépend de la complexité du projet, généralement entre 2 et 6 semaines." },
-            { id: 6, question: "Proposez-vous une assistance après livraison?", response: "Oui, nous offrons une assistance technique pendant 3 mois après la livraison du projet." },
-            { id: 7, question: "Quelles technologies utilisez-vous?", response: "Nous utilisons les dernières technologies web: HTML5, CSS3, JavaScript, React, Node.js, et bases de données Firebase." },
-            { id: 8, question: "Pouvez-vous refaire un site existant?", response: "Oui, nous pouvons refondre ou améliorer un site web existant." },
-            { id: 9, question: "Proposez-vous des formations?", response: "Oui, nous proposons des formations en développement web et utilisation d'outils numériques." },
-            { id: 10, question: "Comment vous contacter?", response: "Vous pouvez nous contacter par WhatsApp au +261384557584 ou par appel au 0323911654." }
+            { id: "1", question: "Quels sont vos services?", response: "Nous proposons des solutions de développement web, création d'applications, et assistance technique." },
+            { id: "2", question: "Comment puis-je commander un site web?", response: "Vous pouvez commander un site web en nous contactant au 0323911654." },
+            { id: "3", question: "Quels sont vos tarifs?", response: "Nos tarifs varient selon le projet. Contactez-nous pour un devis personnalisé." },
+            { id: "4", question: "Dans quelles régions intervenez-vous?", response: "Nous intervenons principalement dans la région SAVA, mais pouvons travailler à distance partout à Madagascar." },
+            { id: "5", question: "Quel est votre délai de livraison?", response: "Le délai dépend de la complexité du projet, généralement entre 2 et 6 semaines." },
+            { id: "6", question: "Proposez-vous une assistance après livraison?", response: "Oui, nous offrons une assistance technique pendant 3 mois après la livraison du projet." },
+            { id: "7", question: "Quelles technologies utilisez-vous?", response: "Nous utilisons les dernières technologies web: HTML5, CSS3, JavaScript, React, Node.js, et bases de données Firebase." },
+            { id: "8", question: "Pouvez-vous refaire un site existant?", response: "Oui, nous pouvons refondre ou améliorer un site web existant." },
+            { id: "9", question: "Proposez-vous des formations?", response: "Oui, nous proposons des formations en développement web et utilisation d'outils numériques." },
+            { id: "10", question: "Comment vous contacter?", response: "Vous pouvez nous contacter par WhatsApp au +261384557584 ou par appel au 0323911654." }
         ];
 
         // Éléments DOM
@@ -774,6 +834,8 @@
         const sendBtn = document.getElementById('sendBtn');
         const notification = document.getElementById('notification');
         const notificationSound = document.getElementById('notificationSound');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const loadingSpinner = document.getElementById('loadingSpinner');
         
         // Éléments Admin
         const adminModeBtn = document.getElementById('adminModeBtn');
@@ -786,6 +848,8 @@
         const cancelLoginBtn = document.getElementById('cancelLoginBtn');
         const adminPassword = document.getElementById('adminPassword');
         const loginError = document.getElementById('loginError');
+        const firebaseStatus = document.getElementById('firebaseStatus');
+        const adminLoadingSpinner = document.getElementById('adminLoadingSpinner');
         
         // Éléments Formulaire Admin
         const questionFormContainer = document.getElementById('questionFormContainer');
@@ -804,17 +868,16 @@
         let questions = [];
         let isAdminMode = false;
         let editMode = false;
+        let questionsRef;
 
-        // Mot de passe admin (peut être changé)
+        // Mot de passe admin
         const ADMIN_PASSWORD = "admin123";
 
-        // Initialisation
+        // ===== INITIALISATION =====
         document.addEventListener('DOMContentLoaded', function() {
-            loadQuestions();
-            generateQuestionButtons();
-            generateQuestionsList();
+            initializeFirebase();
             
-            // Événements
+            // Événements Utilisateur
             sendBtn.addEventListener('click', sendMessage);
             messageInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') sendMessage();
@@ -833,27 +896,212 @@
             });
         });
 
-        // ===== FONCTIONS UTILISATEUR =====
+        // ===== FONCTIONS FIREBASE =====
 
-        // Charger les questions depuis le localStorage
-        function loadQuestions() {
-            const savedQuestions = localStorage.getItem('asa_questions');
-            if (savedQuestions) {
-                questions = JSON.parse(savedQuestions);
+        // Initialiser Firebase et écouter les connexions
+        function initializeFirebase() {
+            // Vérifier l'état de connexion
+            const connectedRef = database.ref(".info/connected");
+            
+            connectedRef.on("value", function(snap) {
+                if (snap.val() === true) {
+                    connectionStatus.textContent = "Connecté à Firebase";
+                    connectionStatus.style.color = "#2e7d32";
+                    firebaseStatus.className = "firebase-status status-connected";
+                    firebaseStatus.innerHTML = '<i class="fas fa-circle" style="font-size: 8px;"></i> Firebase Connecté';
+                    
+                    // Charger les questions depuis Firebase
+                    loadQuestionsFromFirebase();
+                } else {
+                    connectionStatus.textContent = "Déconnecté - Utilisation du cache";
+                    connectionStatus.style.color = "#e53e3e";
+                    firebaseStatus.className = "firebase-status status-disconnected";
+                    firebaseStatus.innerHTML = '<i class="fas fa-circle" style="font-size: 8px;"></i> Firebase Déconnecté';
+                    
+                    // Charger depuis le cache local
+                    loadQuestionsFromCache();
+                }
+            });
+            
+            // Initialiser la référence des questions
+            questionsRef = database.ref('questions');
+        }
+
+        // Charger les questions depuis Firebase
+        function loadQuestionsFromFirebase() {
+            loadingSpinner.style.display = 'block';
+            
+            questionsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                
+                if (data) {
+                    // Convertir l'objet Firebase en tableau
+                    questions = Object.keys(data).map(key => ({
+                        id: key,
+                        ...data[key]
+                    }));
+                } else {
+                    // Si Firebase est vide, initialiser avec les questions par défaut
+                    initializeDefaultQuestions();
+                    return;
+                }
+                
+                // Mettre à jour les interfaces
+                generateQuestionButtons();
+                if (isAdminMode) {
+                    generateQuestionsList();
+                }
+                
+                // Sauvegarder dans le cache local
+                saveQuestionsToCache();
+                
+                // Cacher le spinner
+                loadingSpinner.style.display = 'none';
+                if (adminLoadingSpinner) {
+                    adminLoadingSpinner.style.display = 'none';
+                }
+                
+                console.log('Questions chargées depuis Firebase:', questions.length);
+            }, (error) => {
+                console.error('Erreur Firebase:', error);
+                loadQuestionsFromCache();
+                loadingSpinner.style.display = 'none';
+            });
+        }
+
+        // Initialiser Firebase avec les questions par défaut
+        function initializeDefaultQuestions() {
+            // Convertir le tableau en objet pour Firebase
+            const questionsObject = {};
+            defaultQuestions.forEach(question => {
+                questionsObject[question.id] = {
+                    question: question.question,
+                    response: question.response
+                };
+            });
+            
+            // Sauvegarder dans Firebase
+            questionsRef.set(questionsObject)
+                .then(() => {
+                    console.log('Questions par défaut initialisées dans Firebase');
+                    loadQuestionsFromFirebase();
+                })
+                .catch(error => {
+                    console.error('Erreur lors de l\'initialisation:', error);
+                    loadQuestionsFromCache();
+                });
+        }
+
+        // Sauvegarder les questions dans Firebase
+        function saveQuestionToFirebase(question, isNew = false) {
+            if (isNew) {
+                // Générer un nouvel ID unique
+                const newQuestionRef = questionsRef.push();
+                const newId = newQuestionRef.key;
+                
+                newQuestionRef.set({
+                    question: question.question,
+                    response: question.response
+                })
+                .then(() => {
+                    console.log('Question ajoutée avec ID:', newId);
+                    showNotificationMessage(isAdminMode ? 'Question ajoutée avec succès!' : 'Question ajoutée avec succès!');
+                })
+                .catch(error => {
+                    console.error('Erreur lors de l\'ajout:', error);
+                    alert('Erreur lors de l\'ajout de la question');
+                });
             } else {
-                questions = [...defaultQuestions];
-                saveQuestions();
+                // Mettre à jour une question existante
+                questionsRef.child(question.id).update({
+                    question: question.question,
+                    response: question.response
+                })
+                .then(() => {
+                    console.log('Question mise à jour avec ID:', question.id);
+                    showNotificationMessage('Question modifiée avec succès!');
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la mise à jour:', error);
+                    alert('Erreur lors de la modification de la question');
+                });
             }
         }
 
-        // Sauvegarder les questions dans le localStorage
-        function saveQuestions() {
-            localStorage.setItem('asa_questions', JSON.stringify(questions));
+        // Supprimer une question de Firebase
+        function deleteQuestionFromFirebase(questionId) {
+            questionsRef.child(questionId).remove()
+                .then(() => {
+                    console.log('Question supprimée avec ID:', questionId);
+                    showNotificationMessage('Question supprimée avec succès!');
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la suppression:', error);
+                    alert('Erreur lors de la suppression de la question');
+                });
         }
+
+        // ===== CACHE LOCAL =====
+
+        // Sauvegarder dans le cache local
+        function saveQuestionsToCache() {
+            localStorage.setItem('asa_questions_cache', JSON.stringify(questions));
+            localStorage.setItem('asa_questions_timestamp', Date.now());
+        }
+
+        // Charger depuis le cache local
+        function loadQuestionsFromCache() {
+            const cachedQuestions = localStorage.getItem('asa_questions_cache');
+            const timestamp = localStorage.getItem('asa_questions_timestamp');
+            
+            if (cachedQuestions && timestamp) {
+                const cacheAge = Date.now() - parseInt(timestamp);
+                const maxAge = 24 * 60 * 60 * 1000; // 24 heures
+                
+                if (cacheAge < maxAge) {
+                    questions = JSON.parse(cachedQuestions);
+                    generateQuestionButtons();
+                    if (isAdminMode) {
+                        generateQuestionsList();
+                    }
+                    
+                    loadingSpinner.style.display = 'none';
+                    if (adminLoadingSpinner) {
+                        adminLoadingSpinner.style.display = 'none';
+                    }
+                    
+                    console.log('Questions chargées depuis le cache:', questions.length);
+                    return;
+                }
+            }
+            
+            // Si pas de cache valide, utiliser les questions par défaut
+            questions = [...defaultQuestions];
+            generateQuestionButtons();
+            if (isAdminMode) {
+                generateQuestionsList();
+            }
+            
+            loadingSpinner.style.display = 'none';
+            if (adminLoadingSpinner) {
+                adminLoadingSpinner.style.display = 'none';
+            }
+            
+            console.log('Questions par défaut chargées:', questions.length);
+        }
+
+        // ===== FONCTIONS UTILISATEUR =====
 
         // Générer les boutons de questions
         function generateQuestionButtons() {
+            if (!questionButtons) return;
+            
             questionButtons.innerHTML = '';
+            
+            if (questions.length === 0) {
+                questionButtons.innerHTML = '<p style="text-align: center; width: 100%; color: #666;">Aucune question disponible</p>';
+                return;
+            }
             
             questions.forEach((q, index) => {
                 const button = document.createElement('button');
@@ -913,6 +1161,13 @@
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
+        }
+
+        // Afficher une notification message
+        function showNotificationMessage(message) {
+            const notification = document.getElementById('notification');
+            notification.querySelector('span').textContent = message;
+            showNotification();
         }
 
         // Ajouter un message au chat
@@ -1128,6 +1383,9 @@
             adminModeBtn.innerHTML = '<i class="fas fa-comments"></i> Mode Utilisateur';
             adminModeBtn.removeEventListener('click', showAdminLogin);
             adminModeBtn.addEventListener('click', switchToUserMode);
+            
+            // Générer la liste des questions pour l'admin
+            generateQuestionsList();
         }
 
         // Revenir au mode utilisateur
@@ -1179,107 +1437,93 @@
                 return;
             }
             
+            const questionData = {
+                question: questionText,
+                response: answerText
+            };
+            
             if (editMode) {
                 // Modification
-                const questionId = parseInt(questionIdInput.value);
-                const index = questions.findIndex(q => q.id === questionId);
-                
-                if (index !== -1) {
-                    questions[index] = {
-                        id: questionId,
-                        question: questionText,
-                        response: answerText
-                    };
-                }
+                const questionId = questionIdInput.value;
+                questionData.id = questionId;
+                saveQuestionToFirebase(questionData, false);
             } else {
                 // Ajout
-                const newId = questions.length > 0 ? Math.max(...questions.map(q => q.id)) + 1 : 1;
-                questions.push({
-                    id: newId,
-                    question: questionText,
-                    response: answerText
-                });
+                saveQuestionToFirebase(questionData, true);
             }
-            
-            // Sauvegarder dans le localStorage
-            saveQuestions();
-            
-            // Regénérer les interfaces
-            generateQuestionButtons();
-            generateQuestionsList();
             
             // Cacher le formulaire
             hideForm();
-            
-            // Afficher une notification
-            alert(editMode ? 'Question modifiée avec succès!' : 'Question ajoutée avec succès!');
         }
 
         // Supprimer une question
         function deleteQuestion(questionId) {
             if (confirm('Êtes-vous sûr de vouloir supprimer cette question?')) {
-                questions = questions.filter(q => q.id !== questionId);
-                saveQuestions();
-                generateQuestionButtons();
-                generateQuestionsList();
-                alert('Question supprimée avec succès!');
+                deleteQuestionFromFirebase(questionId);
             }
         }
 
         // Générer la liste des questions dans l'admin
         function generateQuestionsList() {
-            questionsList.innerHTML = '';
+            if (!questionsList) return;
             
-            if (questions.length === 0) {
-                questionsList.innerHTML = `
-                    <div class="question-item">
-                        <p style="text-align: center; color: #666; padding: 20px;">
-                            Aucune question pour le moment. Cliquez sur "Ajouter Question" pour commencer.
-                        </p>
-                    </div>
-                `;
-            } else {
-                questions.forEach(question => {
-                    const questionItem = document.createElement('div');
-                    questionItem.className = 'question-item';
-                    
-                    questionItem.innerHTML = `
-                        <div class="question-item-header">
-                            <div class="question-text">${question.question}</div>
-                            <div class="question-item-actions">
-                                <button class="admin-btn btn-primary edit-btn" data-id="${question.id}">
-                                    <i class="fas fa-edit"></i> Modifier
-                                </button>
-                                <button class="admin-btn btn-danger delete-btn" data-id="${question.id}">
-                                    <i class="fas fa-trash"></i> Supprimer
-                                </button>
-                            </div>
+            adminLoadingSpinner.style.display = 'block';
+            
+            setTimeout(() => {
+                questionsList.innerHTML = '';
+                
+                if (questions.length === 0) {
+                    questionsList.innerHTML = `
+                        <div class="question-item">
+                            <p style="text-align: center; color: #666; padding: 20px;">
+                                Aucune question pour le moment. Cliquez sur "Ajouter Question" pour commencer.
+                            </p>
                         </div>
-                        <div class="answer-text">${question.response}</div>
                     `;
+                } else {
+                    questions.forEach(question => {
+                        const questionItem = document.createElement('div');
+                        questionItem.className = 'question-item';
+                        
+                        questionItem.innerHTML = `
+                            <div class="question-item-header">
+                                <div class="question-text">${question.question}</div>
+                                <div class="question-item-actions">
+                                    <button class="admin-btn btn-primary edit-btn" data-id="${question.id}">
+                                        <i class="fas fa-edit"></i> Modifier
+                                    </button>
+                                    <button class="admin-btn btn-danger delete-btn" data-id="${question.id}">
+                                        <i class="fas fa-trash"></i> Supprimer
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="answer-text">${question.response}</div>
+                        `;
+                        
+                        questionsList.appendChild(questionItem);
+                    });
                     
-                    questionsList.appendChild(questionItem);
-                });
-                
-                // Ajouter les événements aux boutons
-                document.querySelectorAll('.edit-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const questionId = parseInt(this.dataset.id);
-                        const question = questions.find(q => q.id === questionId);
-                        if (question) showEditForm(question);
+                    // Ajouter les événements aux boutons
+                    document.querySelectorAll('.edit-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const questionId = this.dataset.id;
+                            const question = questions.find(q => q.id === questionId);
+                            if (question) showEditForm(question);
+                        });
                     });
-                });
-                
-                document.querySelectorAll('.delete-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const questionId = parseInt(this.dataset.id);
-                        deleteQuestion(questionId);
+                    
+                    document.querySelectorAll('.delete-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const questionId = this.dataset.id;
+                            deleteQuestion(questionId);
+                        });
                     });
-                });
-            }
-            
-            // Mettre à jour le compteur
-            questionsCount.textContent = `${questions.length} question${questions.length > 1 ? 's' : ''}`;
+                }
+                
+                // Mettre à jour le compteur
+                questionsCount.textContent = `${questions.length} question${questions.length > 1 ? 's' : ''}`;
+                adminLoadingSpinner.style.display = 'none';
+            }, 500);
         }
     </script>
 </body>
