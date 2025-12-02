@@ -31,7 +31,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
@@ -93,6 +93,7 @@
             transition: var(--transition);
             display: flex;
             align-items: center;
+            cursor: pointer;
         }
 
         .nav-links a i {
@@ -245,6 +246,7 @@
             margin: 0 10px;
             font-weight: 500;
             transition: var(--transition);
+            cursor: pointer;
         }
 
         .form-links a:hover {
@@ -760,10 +762,10 @@
                     FormationPro
                 </div>
                 <ul class="nav-links">
-                    <li><a href="#" onclick="showPage('home')"><i class="fas fa-home"></i> Accueil</a></li>
-                    <li><a href="#" onclick="showPage('free-courses')"><i class="fas fa-video"></i> Formations Gratuites</a></li>
-                    <li><a href="#" onclick="showPage('paid-courses')"><i class="fas fa-star"></i> Formations Payantes</a></li>
-                    <li><a href="#" onclick="showPage('notifications')"><i class="fas fa-bell"></i> Notifications</a></li>
+                    <li><a onclick="showPage('home')"><i class="fas fa-home"></i> Accueil</a></li>
+                    <li><a onclick="showPage('free-courses')"><i class="fas fa-video"></i> Formations Gratuites</a></li>
+                    <li><a onclick="showPage('paid-courses')"><i class="fas fa-star"></i> Formations Payantes</a></li>
+                    <li><a onclick="showPage('notifications')"><i class="fas fa-bell"></i> Notifications</a></li>
                 </ul>
                 <div class="user-actions">
                     <button id="login-btn" onclick="showPage('login')"><i class="fas fa-sign-in-alt"></i> Connexion</button>
@@ -798,7 +800,7 @@
                 </div>
                 <button class="btn" onclick="signup()"><i class="fas fa-user-plus"></i> S'inscrire</button>
                 <div class="form-links">
-                    <a href="#" onclick="showPage('login')">Déjà un compte? Se connecter</a>
+                    <a onclick="showPage('login')">Déjà un compte? Se connecter</a>
                 </div>
             </div>
         </div>
@@ -821,8 +823,8 @@
                 </div>
                 <button class="btn" onclick="login()"><i class="fas fa-sign-in-alt"></i> Se connecter</button>
                 <div class="form-links">
-                    <a href="#" onclick="showPage('forgot-password')">Mot de passe oublié?</a>
-                    <a href="#" onclick="showPage('signup')">S'inscrire</a>
+                    <a onclick="showPage('forgot-password')">Mot de passe oublié?</a>
+                    <a onclick="showPage('signup')">S'inscrire</a>
                 </div>
             </div>
         </div>
@@ -840,13 +842,13 @@
                 </div>
                 <button class="btn" onclick="resetPassword()"><i class="fas fa-paper-plane"></i> Envoyer le lien de réinitialisation</button>
                 <div class="form-links">
-                    <a href="#" onclick="showPage('login')">Retour à la connexion</a>
+                    <a onclick="showPage('login')">Retour à la connexion</a>
                 </div>
             </div>
         </div>
 
         <!-- Page d'accueil -->
-        <div id="home-page" class="page active">
+        <div id="home-page" class="page">
             <div class="hero">
                 <h1>Formez-vous avec les meilleurs</h1>
                 <p>Découvrez nos formations de qualité pour développer vos compétences et booster votre carrière. Apprenez à votre rythme avec des experts.</p>
@@ -972,14 +974,14 @@
                         <input type="text" id="video-title" placeholder="Titre de la vidéo">
                     </div>
                     
-                    <!-- NOUVEAU: Champ pour le lien iframe (affichage) -->
+                    <!-- Champ pour le lien iframe (affichage) -->
                     <div class="form-group">
                         <label for="video-link-iframe">Lien iframe (pour l'affichage)</label>
                         <input type="text" id="video-link-iframe" placeholder="Ex: https://www.youtube.com/embed/VIDEO_ID">
                         <small style="color: var(--gray-color); font-size: 12px;">Lien embed/iframe pour afficher la vidéo (ex: YouTube embed)</small>
                     </div>
                     
-                    <!-- NOUVEAU: Champ pour le lien de téléchargement -->
+                    <!-- Champ pour le lien de téléchargement -->
                     <div class="form-group">
                         <label for="video-link-download">Lien de téléchargement</label>
                         <input type="text" id="video-link-download" placeholder="Ex: https://example.com/video.mp4">
@@ -1071,25 +1073,44 @@
 
         // Fonction pour afficher une page spécifique
         function showPage(pageId) {
+            console.log('Chargement de la page:', pageId);
+            
+            // Si l'utilisateur est connecté et essaie d'accéder aux pages de connexion/inscription
+            if (currentUser && (pageId === 'login' || pageId === 'signup' || pageId === 'forgot-password')) {
+                pageId = 'home';
+            }
+            
+            // Si l'utilisateur n'est pas connecté et essaie d'accéder aux pages protégées
+            if (!currentUser && pageId !== 'login' && pageId !== 'signup' && pageId !== 'forgot-password') {
+                pageId = 'login';
+            }
+            
             // Masquer toutes les pages
-            document.querySelectorAll('.page').forEach(page => {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
                 page.classList.remove('active');
             });
             
             // Afficher la page demandée
-            document.getElementById(`${pageId}-page`).classList.add('active');
-            
-            // Si l'utilisateur est connecté et essaie d'accéder aux pages de connexion/inscription
-            if (currentUser && (pageId === 'login' || pageId === 'signup' || pageId === 'forgot-password')) {
-                showPage('home');
+            const pageElement = document.getElementById(pageId + '-page');
+            if (pageElement) {
+                pageElement.classList.add('active');
+                console.log('Page affichée:', pageId);
+            } else {
+                console.error('Page non trouvée:', pageId);
+                // Afficher la page d'accueil par défaut
+                document.getElementById('home-page').classList.add('active');
             }
             
             // Charger les données spécifiques à la page
             if (pageId === 'free-courses' || pageId === 'home') {
+                console.log('Chargement des vidéos gratuites');
                 loadFreeVideos();
             } else if (pageId === 'paid-courses') {
+                console.log('Vérification du statut de paiement');
                 checkPaymentStatus();
             } else if (pageId === 'notifications') {
+                console.log('Chargement des notifications');
                 loadNotifications();
             }
         }
@@ -1218,19 +1239,21 @@
             const adminBtn = document.getElementById('admin-btn');
             
             if (currentUser) {
-                loginBtn.style.display = 'none';
-                logoutBtn.style.display = 'block';
-                adminBtn.style.display = 'block';
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (logoutBtn) logoutBtn.style.display = 'block';
+                if (adminBtn) adminBtn.style.display = 'block';
             } else {
-                loginBtn.style.display = 'block';
-                logoutBtn.style.display = 'none';
-                adminBtn.style.display = 'none';
+                if (loginBtn) loginBtn.style.display = 'block';
+                if (logoutBtn) logoutBtn.style.display = 'none';
+                if (adminBtn) adminBtn.style.display = 'none';
             }
         }
 
         // Charger les vidéos gratuites depuis Firebase
         function loadFreeVideos() {
+            console.log('Début du chargement des vidéos gratuites');
             videosRef.orderByChild('type').equalTo('free').on('value', (snapshot) => {
+                console.log('Données reçues pour les vidéos gratuites');
                 const freeVideosGrid = document.getElementById('free-videos-grid');
                 const homeFreeVideos = document.getElementById('home-free-videos');
                 const homePopularVideos = document.getElementById('home-popular-videos');
@@ -1243,6 +1266,7 @@
                 const videos = snapshot.val();
                 
                 if (!videos || Object.keys(videos).length === 0) {
+                    console.log('Aucune vidéo gratuite trouvée');
                     if (freeVideosGrid) {
                         freeVideosGrid.innerHTML = `
                             <div class="empty-state">
@@ -1263,6 +1287,8 @@
                     }
                     return;
                 }
+                
+                console.log('Vidéos gratuites trouvées:', Object.keys(videos).length);
                 
                 // Convertir l'objet en tableau
                 const videoArray = Object.keys(videos).map(key => {
@@ -1290,6 +1316,8 @@
                         });
                     }
                 });
+            }, (error) => {
+                console.error('Erreur lors du chargement des vidéos gratuites:', error);
             });
         }
 
@@ -1297,24 +1325,29 @@
         function createVideoCard(video) {
             const card = document.createElement('div');
             card.className = 'video-card';
+            
+            // Préparer les liens
+            const linkIframe = video.linkIframe || video.link || '';
+            const linkDownload = video.linkDownload || '';
+            
             card.innerHTML = `
                 <div class="video-badge ${video.type}">${video.type === 'free' ? 'Gratuit' : 'Payant'}</div>
-                <div class="video-thumbnail" onclick="playVideo('${video.id}')">
+                <div class="video-thumbnail" onclick="playVideo(this, '${linkIframe.replace(/'/g, "\\'")}')">
                     <i class="fas fa-play-circle"></i>
                 </div>
-                <div class="video-player" id="video-player-${video.id}">
-                    <iframe src="" class="video-iframe" id="video-iframe-${video.id}" allowfullscreen></iframe>
+                <div class="video-player" style="display: none;">
+                    <iframe src="" class="video-iframe" allowfullscreen></iframe>
                 </div>
                 <div class="video-info">
-                    <h3 class="video-title">${video.title}</h3>
-                    <p class="video-description">${video.description}</p>
+                    <h3 class="video-title">${video.title || 'Sans titre'}</h3>
+                    <p class="video-description">${video.description || 'Pas de description'}</p>
                     <div class="video-actions">
                         <div class="reaction-buttons">
                             <button class="like" onclick="likeVideo('${video.id}')">👍 <span id="likes-${video.id}">0</span></button>
                             <button class="dislike" onclick="dislikeVideo('${video.id}')">👎 <span id="dislikes-${video.id}">0</span></button>
                         </div>
-                        ${video.linkDownload ? 
-                            `<button class="download-btn" onclick="downloadVideo('${video.linkDownload}', '${video.title}')"><i class="fas fa-download"></i> Télécharger</button>` : 
+                        ${linkDownload ? 
+                            `<button class="download-btn" onclick="window.open('${linkDownload}', '_blank')"><i class="fas fa-download"></i> Télécharger</button>` : 
                             `<button class="download-btn" style="opacity: 0.5; cursor: not-allowed;" title="Téléchargement non disponible"><i class="fas fa-download"></i> Télécharger</button>`
                         }
                     </div>
@@ -1330,10 +1363,6 @@
                 </div>
             `;
             
-            // Stocker les liens dans l'élément pour y accéder plus tard
-            card.dataset.linkIframe = video.linkIframe || video.link || '';
-            card.dataset.linkDownload = video.linkDownload || '';
-            
             // Charger les réactions pour cette vidéo
             loadReactions(video.id);
             
@@ -1344,18 +1373,16 @@
         }
 
         // Fonction pour jouer une vidéo
-        function playVideo(videoId) {
-            const card = document.querySelector(`#video-player-${videoId}`).closest('.video-card');
-            const thumbnail = card.querySelector('.video-thumbnail');
-            const player = card.querySelector(`#video-player-${videoId}`);
-            const iframe = card.querySelector(`#video-iframe-${videoId}`);
-            
-            const linkIframe = card.dataset.linkIframe;
-            
+        function playVideo(element, linkIframe) {
             if (!linkIframe) {
                 alert('Lien de vidéo non disponible.');
                 return;
             }
+            
+            const card = element.closest('.video-card');
+            const thumbnail = card.querySelector('.video-thumbnail');
+            const player = card.querySelector('.video-player');
+            const iframe = card.querySelector('.video-iframe');
             
             // Cacher la miniature et afficher le lecteur
             thumbnail.style.display = 'none';
@@ -1403,25 +1430,6 @@
                     commentsContainer.appendChild(commentElement);
                 });
             });
-        }
-
-        // Fonction pour télécharger une vidéo
-        function downloadVideo(link, title) {
-            if (!link) {
-                alert('Lien de téléchargement non disponible.');
-                return;
-            }
-            
-            // Ouvrir le lien dans un nouvel onglet
-            window.open(link, '_blank');
-            
-            // Ou créer un lien de téléchargement invisible
-            // const downloadLink = document.createElement('a');
-            // downloadLink.href = link;
-            // downloadLink.download = title || 'video';
-            // document.body.appendChild(downloadLink);
-            // downloadLink.click();
-            // document.body.removeChild(downloadLink);
         }
 
         // Vérifier le statut de paiement de l'utilisateur
@@ -1878,8 +1886,8 @@
                 });
             })
             .catch((error) => {
-                console.error('Erreur lors de l'ajout de la vidéo:', error);
-                alert('Une erreur s'est produite. Veuillez réessayer.');
+                console.error('Erreur lors de l\'ajout de la vidéo:', error);
+                alert('Une erreur s\'est produite. Veuillez réessayer.');
             });
         }
 
@@ -1893,7 +1901,7 @@
                     })
                     .catch((error) => {
                         console.error('Erreur lors de la suppression de la vidéo:', error);
-                        alert('Une erreur s'est produite. Veuillez réessayer.');
+                        alert('Une erreur s\'est produite. Veuillez réessayer.');
                     });
             }
         }
@@ -1916,7 +1924,7 @@
                 })
                 .catch((error) => {
                     console.error('Erreur lors de la confirmation du paiement:', error);
-                    alert('Une erreur s'est produite. Veuillez réessayer.');
+                    alert('Une erreur s\'est produite. Veuillez réessayer.');
                 });
         }
 
@@ -1937,25 +1945,61 @@
                 })
                 .catch((error) => {
                     console.error('Erreur lors du rejet du paiement:', error);
-                    alert('Une erreur s'est produite. Veuillez réessayer.');
+                    alert('Une erreur s\'est produite. Veuillez réessayer.');
                 });
         }
 
         // Écouteur pour les changements d'état d'authentification
         auth.onAuthStateChanged((user) => {
+            console.log('État d\'authentification changé:', user ? 'Connecté' : 'Déconnecté');
             currentUser = user;
             updateUI();
             
             if (user) {
-                showPage('home');
+                // Utilisateur connecté
+                console.log('Utilisateur connecté:', user.email);
+                
+                // Vérifier si nous sommes sur une page d'authentification
+                const currentPage = document.querySelector('.page.active');
+                if (currentPage && (currentPage.id === 'login-page' || currentPage.id === 'signup-page' || currentPage.id === 'forgot-password-page')) {
+                    showPage('home');
+                } else if (!currentPage) {
+                    showPage('home');
+                }
             } else {
-                showPage('login');
+                // Utilisateur non connecté
+                console.log('Utilisateur non connecté');
+                
+                // Vérifier si nous sommes sur une page protégée
+                const currentPage = document.querySelector('.page.active');
+                if (currentPage && !['login-page', 'signup-page', 'forgot-password-page'].includes(currentPage.id)) {
+                    showPage('login');
+                } else if (!currentPage) {
+                    showPage('login');
+                }
             }
         });
 
         // Initialisation au chargement de la page
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page chargée, initialisation en cours...');
+            
+            // Initialiser l'interface
             updateUI();
+            
+            // Par défaut, afficher la page de login
+            // L'écouteur onAuthStateChanged gérera le changement si l'utilisateur est déjà connecté
+            showPage('login');
+            
+            console.log('Initialisation terminée');
+        });
+
+        // Ajouter des gestionnaires d'événements pour les liens de navigation
+        document.addEventListener('click', function(e) {
+            // Empêcher le comportement par défaut des liens
+            if (e.target.tagName === 'A' && e.target.getAttribute('href') === '#') {
+                e.preventDefault();
+            }
         });
     </script>
 </body>
