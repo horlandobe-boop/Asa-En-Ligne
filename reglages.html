@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FANASANA MANETRIKETRIKA - OPÉRATION CAKE</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        
+        body {
+            font-family: 'Arial', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 8px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 8px;
+            padding: 6px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .btn {
+            background: #2c5530;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            margin: 0 3px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .btn:hover {
+            background: #d4af37;
+            transform: translateY(-1px);
+        }
+        
+        .pdf-container {
+            background: white;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 6px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            position: relative;
+            border: 1.5px solid #2c5530;
+            margin: 0 auto;
+        }
+        
+        .two-columns {
+            display: flex;
+            gap: 3px;
+            height: 100%;
+        }
+        
+        .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .invitation-card {
+            background: white;
+            border: 1px solid #d4af37;
+            border-radius: 4px;
+            padding: 4px;
+            position: relative;
+            page-break-inside: avoid;
+            break-inside: avoid;
+            font-size: 7px;
+            line-height: 1.05;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 85px;
+            box-shadow: 0 0.5px 1px rgba(0,0,0,0.05);
+        }
+        
+        .cut-line {
+            border-top: 0.5px dashed #ccc;
+            margin: 1px 0;
+            padding-top: 1px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2px;
+        }
+        
+        .main-title {
+            font-size: 7.5px;
+            font-weight: bold;
+            color: #2c5530;
+            margin-bottom: 1px;
+            text-transform: uppercase;
+            letter-spacing: 0.1px;
+        }
+        
+        .content {
+            text-align: justify;
+            flex-grow: 1;
+        }
+        
+        .greeting {
+            font-size: 7px;
+            color: #2c5530;
+            font-weight: bold;
+            text-align: center;
+            margin: 1px 0;
+            font-style: italic;
+        }
+        
+        .support-text {
+            font-style: italic;
+            color: #555;
+            text-align: center;
+            margin: 1px 0;
+            padding: 1px;
+            background: white;
+            border-radius: 1px;
+            font-size: 6.5px;
+        }
+        
+        .price-section {
+            text-align: center;
+            margin: 2px 0;
+            padding: 2px;
+            background: #e8f5e8;
+            border-radius: 2px;
+            border: 0.3px solid #d4af37;
+        }
+        
+        .price {
+            font-size: 8px;
+            font-weight: bold;
+            color: #d4af37;
+            display: block;
+        }
+        
+        .date {
+            font-size: 7px;
+            color: #2c5530;
+            font-weight: bold;
+            display: block;
+            margin-top: 0.5px;
+        }
+        
+        .blessing {
+            font-size: 7px;
+            color: #2c5530;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 2px;
+            padding-top: 1px;
+            border-top: 0.3px solid #e0e0e0;
+            font-style: italic;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #666;
+            font-size: 5px;
+            margin-top: 1px;
+        }
+        
+        .church-info {
+            font-weight: bold;
+            color: #2c5530;
+        }
+        
+        .images-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .cake-img {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0.04;
+        }
+        
+        .bird-img {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            opacity: 0.04;
+        }
+        
+        /* Positions pour les images de fond */
+        .pos-1 { top: 4%; left: 4%; }
+        .pos-2 { top: 16%; right: 4%; }
+        .pos-3 { top: 28%; left: 6%; }
+        .pos-4 { top: 40%; right: 6%; }
+        .pos-5 { top: 52%; left: 4%; }
+        .pos-6 { top: 64%; right: 4%; }
+        .pos-7 { top: 76%; left: 6%; }
+        .pos-8 { top: 88%; right: 6%; }
+        .pos-9 { top: 6%; right: 8%; }
+        .pos-10 { top: 18%; left: 8%; }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .controls {
+                display: none;
+            }
+            
+            .pdf-container {
+                box-shadow: none;
+                border: 1px solid #2c5530;
+                width: 100%;
+                min-height: 100vh;
+                padding: 3px;
+                border-radius: 3px;
+            }
+            
+            .invitation-card {
+                border: 1px solid #d4af37;
+                border-radius: 3px;
+            }
+        }
+
+        .download-info {
+            margin-top: 3px;
+            font-size: 8px;
+            color: #666;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="controls">
+        <button class="btn" onclick="downloadPDF()">
+            <i class="fas fa-file-pdf"></i> Télécharger PDF
+        </button>
+        <button class="btn" onclick="downloadWord()">
+            <i class="fas fa-file-word"></i> Télécharger Word
+        </button>
+        <button class="btn" onclick="printDocument()">
+            <i class="fas fa-print"></i> Imprimer
+        </button>
+        <div class="download-info">
+            💡 10 invitations par page (5 à gauche, 5 à droite) - Prêtes à découper
+        </div>
+    </div>
+
+    <div class="pdf-container" id="contentToConvert">
+        <div class="images-container" id="backgroundImages">
+            <!-- Les images de fond seront ajoutées dynamiquement -->
+        </div>
+        
+        <div class="two-columns" id="invitationsContainer">
+            <!-- Les invitations seront générées dynamiquement dans deux colonnes -->
+        </div>
+    </div>
+
+    <script>
+        // Générer 10 invitations (5 par colonne)
+        function generateInvitations() {
+            const container = document.getElementById('invitationsContainer');
+            const backgroundContainer = document.getElementById('backgroundImages');
+            
+            // Vider les conteneurs
+            container.innerHTML = '';
+            backgroundContainer.innerHTML = '';
+            
+            // Créer les deux colonnes
+            const leftColumn = document.createElement('div');
+            leftColumn.className = 'column';
+            
+            const rightColumn = document.createElement('div');
+            rightColumn.className = 'column';
+            
+            // Générer 10 invitations (5 pour chaque colonne)
+            for (let i = 1; i <= 10; i++) {
+                const invitation = document.createElement('div');
+                invitation.className = 'invitation-card';
+                invitation.innerHTML = `
+                    <div class="header">
+                        <div class="main-title">OPÉRATION CAKE</div>
+                    </div>
+                    
+                    <div class="content">
+                        <div class="greeting">
+                            "Miarahaba amin'ny anaran'i Jesosy Kristy!"
+                        </div>
+                        
+                        <div class="support-text">
+                            Izahay sampana vehivavy mendrika ao amin'ny Fiangonana 
+                            Assemblée de Dieu Antalaha Ambondrona dia manasa anao
+                            handray anjara amin'ny <strong>OPÉRATION CAKE</strong>.
+                        </div>
+
+                        <div class="price-section">
+                            <span class="date">13 Décembre 2025</span>
+                            <span class="price">10,000 Ar</span>
+                        </div>
+                        
+                        <div class="blessing">
+                            "Andriamanitra anie hitahy anao"
+                        </div>
+                    </div>
+                   
+                    ${i < 10 ? '<div class="cut-line"></div>' : ''}
+                `;
+                
+                // Ajouter à la colonne gauche ou droite
+                if (i <= 5) {
+                    leftColumn.appendChild(invitation);
+                } else {
+                    rightColumn.appendChild(invitation);
+                }
+                
+                // Ajouter des images de fond
+                if (i <= 10) {
+                    const cakeImg = document.createElement('img');
+                    cakeImg.className = `cake-img pos-${i}`;
+                    cakeImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%232c5530' d='M21 10.5V11C21 12.11 20.11 13 19 13H13V19H15V21H9V19H11V13H5C3.89 13 3 12.11 3 11V10.5C3 10.22 3.22 10 3.5 10H9V7H7V5H17V7H15V10H20.5C20.78 10 21 10.22 21 10.5M12 2C12.28 2 12.5 2.22 12.5 2.5V5.5C12.5 5.78 12.28 6 12 6C11.72 6 11.5 5.78 11.5 5.5V2.5C11.5 2.22 11.72 2 12 2Z'/%3E%3C/svg%3E";
+                    cakeImg.alt = "Cake";
+                    
+                    const birdImg = document.createElement('img');
+                    birdImg.className = `bird-img pos-${i}`;
+                    birdImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%232c5530' d='M23 11.5L19.95 10.37C19.69 9.22 19.04 8.56 19.04 8.56C17.44 7 15.38 7 15.38 7S14.44 7.13 13.5 7.5L12 6L10.5 7.5C9.56 7.13 8.62 7 8.62 7S6.56 7 5 8.56C5 8.56 4.31 9.22 4.05 10.37L1 11.5L3.43 12.86C3.32 13.5 3.32 14.5 3.43 15.14L1 16.5L4.05 17.63C4.31 18.78 5 19.44 5 19.44C6.56 21 8.62 21 8.62 21S9.56 20.87 10.5 20.5L12 22L13.5 20.5C14.44 20.87 15.38 21 15.38 21S17.44 21 19 19.44C19 19.44 19.69 18.78 19.95 17.63L23 16.5L20.57 15.14C20.68 14.5 20.68 13.5 20.57 12.86L23 11.5M12 15.5C10.62 15.5 9.5 14.38 9.5 13S10.62 10.5 12 10.5S14.5 11.62 14.5 13S13.38 15.5 12 15.5Z'/%3E%3C/svg%3E";
+                    birdImg.alt = "Oiseau";
+                    
+                    backgroundContainer.appendChild(cakeImg);
+                    backgroundContainer.appendChild(birdImg);
+                }
+            }
+            
+            // Ajouter les colonnes au conteneur principal
+            container.appendChild(leftColumn);
+            container.appendChild(rightColumn);
+        }
+
+        // Télécharger en PDF avec configuration optimisée
+        function downloadPDF() {
+            const element = document.getElementById('contentToConvert');
+            const opt = {
+                margin: 2,
+                filename: 'operation_cake_invitations.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 3,
+                    useCORS: true,
+                    logging: false
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait',
+                    compress: true
+                }
+            };
+
+            // Ajouter un délai pour s'assurer que tout est chargé
+            setTimeout(() => {
+                html2pdf().set(opt).from(element).save();
+            }, 500);
+        }
+
+        // Télécharger en Word (approximation avec HTML)
+        function downloadWord() {
+            const content = document.getElementById('contentToConvert').innerHTML;
+            const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
+            const footer = "</body></html>";
+            const sourceHTML = header + content + footer;
+            
+            const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+            const downloadLink = document.createElement("a");
+            
+            document.body.appendChild(downloadLink);
+            
+            downloadLink.href = source;
+            downloadLink.download = 'operation_cake_invitations.doc';
+            downloadLink.click();
+            
+            document.body.removeChild(downloadLink);
+        }
+
+        // Imprimer le document
+        function printDocument() {
+            window.print();
+        }
+
+        // Générer les invitations au chargement de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            generateInvitations();
+            
+            // Ajouter la date actuelle
+            const today = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = today.toLocaleDateString('mg-MG', options);
+            
+            const dateElement = document.createElement('div');
+            dateElement.style.textAlign = 'center';
+            dateElement.style.marginTop = '3px';
+            dateElement.style.color = '#666';
+            dateElement.style.fontSize = '7px';
+            dateElement.textContent = `Nosoratan'ny ${dateString}`;
+            
+            document.querySelector('.controls').appendChild(dateElement);
+        });
+
+        // Optimiser l'impression
+        window.onbeforeprint = function() {
+            document.body.style.background = 'white';
+        };
+        
+        window.onafterprint = function() {
+            document.body.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+        };
+    </script>
+</body>
+</html>

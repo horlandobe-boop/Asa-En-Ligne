@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COURS DE MATHEMATIQUE SERIE A2</title>
+
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --secondary: #0284c7;
+  --dark: #1e293b;
+  --light: #f8fafc;
+  --gray: #64748b;
+  --gray-light: #e2e8f0;
+  --white: #ffffff;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --radius: 12px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  line-height: 1.6;
+  color: var(--dark);
+}
+
+/* Header Styles */
+header {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 20px;
+  background: var(--dark);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+  flex-wrap: wrap;
+}
+
+header button {
+  padding: 12px 24px;
+  border: none;
+  background: var(--secondary);
+  color: var(--white);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+header button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+header button:hover::before {
+  left: 100%;
+}
+
+header button:hover {
+  background: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+/* Badge de notification */
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Section Styles */
+section {
+  display: none;
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.active {
+  display: block;
+}
+
+h2 {
+  color: var(--dark);
+  margin-bottom: 25px;
+  font-size: 2rem;
+  text-align: center;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+/* Box Styles */
+.box {
+  background: var(--white);
+  padding: 25px;
+  border-radius: var(--radius);
+  margin-bottom: 25px;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--primary) 0%, transparent 70%);
+  opacity: 0.03;
+  z-index: 1;
+  pointer-events: none; /* Permet de cliquer à travers */
+}
+
+.box:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.box h3 {
+  color: var(--dark);
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Download Button */
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 20px;
+  background: var(--primary);
+  color: var(--white);
+  text-decoration: none;
+  border-radius: var(--radius);
+  font-weight: 500;
+  transition: var(--transition);
+  border: 2px solid transparent;
+  position: relative;
+  z-index: 2;
+}
+
+.download-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+/* Comment Section */
+.comment-section {
+  margin-top: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.comment-toggle {
+  background: var(--gray-light);
+  border: none;
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dark);
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.comment-toggle:hover {
+  background: var(--gray);
+  color: var(--white);
+}
+
+.comment-input-group {
+  display: none;
+  gap: 10px;
+  align-items: flex-end;
+  margin-bottom: 15px;
+}
+
+.comment-input-group.active {
+  display: flex;
+}
+
+.comment-input-group textarea {
+  flex: 1;
+  margin-top: 0;
+  height: 60px;
+  resize: vertical;
+  min-height: 60px;
+  max-height: 120px;
+}
+
+.send-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  width: 60px;
+}
+
+.send-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.send-btn i {
+  font-size: 20px;
+}
+
+/* Video size adjustment */
+.video-container {
+  width: 100%;
+  margin: 15px 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.video-container iframe {
+  width: 100%;
+  height: 200px; /* Taille réduite */
+  border: none;
+}
+
+/* Comment List */
+.comment-list {
+  margin-top: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.comment-item {
+  padding: 12px;
+  border-bottom: 1px solid var(--gray-light);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.comment-item:last-child {
+  border-bottom: none;
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.comment-content {
+  flex: 1;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+
+.comment-text {
+  color: var(--gray);
+  line-height: 1.4;
+}
+
+.comment-reactions {
+  display: flex;
+  gap: 15px;
+  margin-top: 8px;
+}
+
+.reaction-btn {
+  background: none;
+  border: none;
+  color: var(--gray);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 16px;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.reaction-btn:hover {
+  background: var(--gray-light);
+  color: var(--primary);
+}
+
+.reaction-btn.active {
+  color: var(--primary);
+  background: var(--gray-light);
+}
+
+.voir-plus-btn {
+  background: var(--gray-light);
+  color: var(--dark);
+  border: none;
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: block;
+  margin: 10px auto 0;
+  font-size: 14px;
+}
+
+.voir-plus-btn:hover {
+  background: var(--gray);
+  color: var(--white);
+}
+
+/* Matiere Button */
+.matiere-btn {
+  padding: 25px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: var(--white);
+  text-align: center;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.matiere-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.matiere-btn:hover::before {
+  left: 100%;
+}
+
+.matiere-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Styles pour les formulaires */
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 10; /* Assure que les inputs sont au-dessus des autres éléments */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius);
+  font-size: 16px;
+  transition: var(--transition);
+  background-color: white;
+  color: var(--dark);
+  position: relative;
+  z-index: 10; /* Assure que les inputs sont au-dessus des autres éléments */
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  text-decoration: none;
+  position: relative;
+  z-index: 10; /* Assure que les boutons sont au-dessus des autres éléments */
+}
+
+.btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.btn-success {
+  background: #10b981;
+}
+
+.btn-success:hover {
+  background: #059669;
+}
+
+.btn-danger {
+  background: #ef4444;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+/* Styles pour les étapes de paiement */
+.payment-step {
+  display: none;
+}
+
+.payment-step.active {
+  display: block;
+}
+
+.payment-info {
+  background: #f0f9ff;
+  padding: 20px;
+  border-radius: var(--radius);
+  border-left: 4px solid var(--primary);
+  margin: 15px 0;
+}
+
+.payment-success {
+  background: #f0fff4;
+  padding: 20px;
+  border-radius: var(--radius);
+  border-left: 4px solid #10b981;
+  margin: 15px 0;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  header {
+    padding: 15px;
+    gap: 10px;
+  }
+  
+  header button {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+  
+  section {
+    padding: 20px 15px;
+  }
+  
+  h2 {
+    font-size: 1.6rem;
+  }
+  
+  .box {
+    padding: 20px;
+  }
+  
+  .matiere-btn {
+    padding: 20px;
+    font-size: 1.1rem;
+  }
+  
+  .comment-input-group {
+    flex-direction: column;
+  }
+  
+  .send-btn {
+    width: 100%;
+    height: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  header button {
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  h2 {
+    font-size: 1.4rem;
+  }
+  
+  .box {
+    padding: 15px;
+  }
+  
+  .video-container iframe {
+    height: 180px;
+  }
+  
+  .comment-reactions {
+    gap: 10px;
+  }
+}
+
+/* Scrollbar personnalisée */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* Animation pour les nouvelles notifications */
+@keyframes newNotification {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.new-notification {
+  animation: newNotification 0.6s ease-out;
+}
+
+/* Style pour les commentaires cachés */
+.comment-item.hidden {
+  display: none;
+}
+
+/* Nouveau commentaire - affiché en bas */
+.new-comment {
+  background: #f0f9ff;
+  border-left: 4px solid var(--primary);
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Correction pour les liens de navigation */
+.nav-link {
+  color: var(--primary);
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: var(--primary-dark);
+}
+
+/* Correction pour les champs de formulaire */
+input, textarea, select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: white !important;
+  color: var(--dark) !important;
+}
+
+/* Assurer que les champs sont interactifs */
+input:not([disabled]), 
+textarea:not([disabled]), 
+select:not([disabled]) {
+  pointer-events: auto !important;
+}
+</style>
+
+<!-- Font Awesome pour les icônes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+<!-- Audio pour la notification sonore -->
+<audio id="notificationSound" preload="auto">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-positive-notification-951.mp3" type="audio/mpeg">
+</audio>
+
+<header id="mainHeader" style="display: none;">
+  <button onclick="showSection('lecon')">
+    Leçon
+  </button>
+  <button onclick="showSection('exercice')">
+    Exercice
+  </button>
+  <button onclick="showSection('notif')" style="position: relative;">
+    Notification
+    <span id="notificationBadge" class="notification-badge" style="display: none;">0</span>
+  </button>
+  <button onclick="showSection('abonnement')">
+    Abonnement
+  </button>
+  <button onclick="deconnexion()" style="background: #ef4444;">
+    Déconnexion
+  </button>
+</header>
+
+<!-- INSCRIPTION -->
+<section id="inscription" class="active">
+   <h2>EDUCENLIGNE INSCRIVEZ-VOUS</h2>
+  <div class="box">
+    <h3>Créer un compte</h3>
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="signupEmail">Email</label>
+        <input type="email" id="signupEmail" placeholder="Votre email" required>
+      </div>
+      <div class="form-group">
+        <label for="signupPassword">Mot de passe</label>
+        <input type="password" id="signupPassword" placeholder="Votre mot de passe" required>
+      </div>
+      <div class="form-group">
+        <label for="signupName">Nom complet</label>
+        <input type="text" id="signupName" placeholder="Votre nom complet" required>
+      </div>
+      <button type="submit" class="btn" style="width: 100%;">S'inscrire</button>
+    </form>
+    <p style="text-align: center; margin-top: 15px;">Déjà un compte ? <a class="nav-link" onclick="showSection('connexion')">Se connecter</a></p>
+  </div>
+</section>
+
+<!-- CONNEXION -->
+<section id="connexion">
+  <h2>🔐 Connexion</h2>
+   <h1>EDUCENLIGNE CONNECTEZ-VOUS</h1>
+  <div class="box">
+    <h3>Connectez-vous à votre compte</h3>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="Votre email" required>
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Mot de passe</label>
+        <input type="password" id="loginPassword" placeholder="Votre mot de passe" required>
+      </div>
+      <button type="submit" class="btn" style="width: 100%;">Se connecter</button>
+    </form>
+    <p style="text-align: center; margin-top: 15px;">Pas de compte ? <a class="nav-link" onclick="showSection('inscription')">S'inscrire</a></p>
+  </div>
+</section>
+
+<!-- PAIEMENT -->
+<section id="paiement">
+  <h2>💳 Paiement</h2>
+  
+  <!-- Étape 1: Information sur les frais -->
+  <div id="etape1" class="box payment-step active">
+    <h3>Étape 1: Information sur les frais</h3>
+    <p><strong>Droit d'inscription : 5 000 Ar</strong></p>
+    <p><strong>Écolage pour 1 mois : 2 000 Ar</strong></p>
+    <hr style="margin: 15px 0;">
+    <h3 style="color: var(--primary);">🔹 Montant total : 7 000 Ar</h3>
+    <button onclick="showEtape(2)" class="btn" style="margin-top: 15px;">D'accord</button>
+  </div>
+
+  <!-- Étape 2: Numéro de téléphone -->
+  <div id="etape2" class="box payment-step">
+    <h3>Étape 2: Numéro de téléphone</h3>
+    <p>Entrez le numéro de téléphone utilisé pour envoyer l'argent :</p>
+    <div class="form-group">
+      <input type="tel" id="phoneNumber" placeholder="Ex: 0341234567" required>
+    </div>
+    <button onclick="showEtape(3)" class="btn">Suivant</button>
+  </div>
+
+  <!-- Étape 3: Nom complet -->
+  <div id="etape3" class="box payment-step">
+    <h3>Étape 3: Nom complet</h3>
+    <p>Entrez votre nom complet :</p>
+    <div class="form-group">
+      <input type="text" id="fullName" placeholder="Votre nom complet" required>
+    </div>
+    <button onclick="showEtape(4)" class="btn">Suivant</button>
+  </div>
+
+  <!-- Étape 4: Numéro de paiement -->
+  <div id="etape4" class="box payment-step">
+    <h3>Étape 4: Instructions de paiement</h3>
+    <div class="payment-info">
+      <p><strong>📌 Numéro de compte : 0323911654</strong></p>
+      <p><strong>📌 Nom : RAVELOMANANTSOA Urmin</strong></p>
+    </div>
+    <p style="margin-top: 15px;">Veuillez envoyer le montant total de <strong>7 000 Ar</strong> à ce numéro.</p>
+    <button onclick="showEtape(5)" class="btn" style="margin-top: 15px;">J'ai effectué le paiement</button>
+  </div>
+
+  <!-- Étape 5: Validation -->
+  <div id="etape5" class="box payment-step">
+    <h3>✔ Paiement soumis</h3>
+    <div class="payment-success">
+      <p><strong>Veuillez attendre la validation de l'administrateur.</strong></p>
+      <p>Cela peut prendre entre 30 minutes et 24 heures.</p>
+    </div>
+    <p style="margin-top: 15px; color: var(--gray);">Vous recevrez un accès à la plateforme une fois votre paiement validé.</p>
+  </div>
+</section>
+
+<!-- LEÇON -->
+<section id="lecon">
+   <a href="contacts.html">Retour</a>
+  <h2>📘 Leçons</h2>
+  <div id="leconList"></div>
+</section>
+
+<!-- EXERCICE -->
+<section id="exercice">
+  <h2>📝 Exercices</h2>
+  <div id="exerciceList"></div>
+</section>
+
+<!-- NOTIFICATION -->
+<section id="notif">
+  <h2>🔔 Notifications</h2>
+  <div id="notifList"></div>
+</section>
+
+<!-- ABONNEMENT -->
+<section id="abonnement">
+  <h2>📚 Abonnement – Safidio ny Matière</h2>
+
+  <div class="box">
+    <h3>🔔 Momba ny Abonnement</h3>
+    <p>
+      Ny abonnement dia manome alalana ny mpianatra hahazo fidirana feno amin'ny
+      fampianarana rehetra ao amin'ny matière voafidiny.
+    </p>
+
+    <h4>🎯 Tombontsoa azo rehefa manao abonnement :</h4>
+    <ul>
+      <li>✔ Fidirana amin'ny leçon feno sy vidéo complet</li>
+      <li>✔ Fidirana amin'ny exercices sy corrections</li>
+      <li>✔ Téléchargement documents (PDF, Audio, HTML)</li>
+      <li>✔ Fanampiana manokana raha mila fanazavana</li>
+      <li>✔ Fampianarana havaozina isan-kerinandro</li>
+    </ul>
+
+    <p><b>💰 Vidiny : 2000 Ar / matière</b></p>
+    <p>Safidio ary ny matière tianao hianarana eto ambany :</p>
+  </div>
+
+  <div class="matiere-btn" onclick="location.href='math.html';">
+    1️⃣ MATHEMATIQUE – 2000 Ar
+  </div>
+
+  <div class="matiere-btn" onclick="location.href='anglais.html';">
+    2️⃣ ANGLAIS – 2000 Ar
+  </div>
+
+  <div class="matiere-btn" onclick="location.href='histoire.html';">
+    3️⃣ HISTOIRE – 2000 Ar
+  </div>
+
+  <div class="matiere-btn" onclick="location.href='philo.html';">
+    4️⃣ PHILOSOPHIE – 2000 Ar
+  </div>
+
+</section>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { 
+  getFirestore, 
+  collection, 
+  onSnapshot, 
+  addDoc, 
+  query, 
+  orderBy, 
+  getDocs,
+  doc,
+  updateDoc,
+  increment,
+  where,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  signInAnonymously,
+  signOut,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+// Configuration Firebase NOUVELLE
+const firebaseConfig = {
+  apiKey: "AIzaSyCfpnU-9JvutdiVV_DT2Pju9-jIF5_oXCc",
+  authDomain: "malagasy-55746.firebaseapp.com",
+  databaseURL: "https://malagasy-55746-default-rtdb.firebaseio.com",
+  projectId: "malagasy-55746",
+  storageBucket: "malagasy-55746.firebasestorage.app",
+  messagingSenderId: "945430173776",
+  appId: "1:945430173776:web:98c71a4b8c1d47238c9955",
+  measurementId: "G-4N6JTLVVLC"
+};
+
+// Initialisation Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// Variables globales
+let notificationCount = 0;
+let lastContentCount = 0;
+let currentUser = null;
+
+// Fonction globale
+window.showSection = function(id){
+  document.querySelectorAll("section").forEach(sec=>sec.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  
+  // Réinitialiser le badge quand on ouvre les notifications
+  if (id === 'notif') {
+    notificationCount = 0;
+    updateNotificationBadge();
+  }
+}
+
+// Fonctions pour la gestion du paiement
+window.showEtape = function(etape) {
+  // Masquer toutes les étapes
+  for (let i = 1; i <= 5; i++) {
+    document.getElementById('etape' + i).classList.remove('active');
+  }
+  // Afficher l'étape courante
+  document.getElementById('etape' + etape).classList.add('active');
+  
+  // Si on arrive à l'étape 5, enregistrer la demande de paiement
+  if (etape === 5) {
+    enregistrerPaiement();
+  }
+}
+
+async function enregistrerPaiement() {
+  if (!currentUser) {
+    alert("Veuillez vous connecter d'abord");
+    showSection('connexion');
+    return;
+  }
+
+  const paymentData = {
+    userId: currentUser.uid,
+    userEmail: currentUser.email,
+    fullName: document.getElementById('fullName').value,
+    phoneNumber: document.getElementById('phoneNumber').value,
+    amount: 7000,
+    status: 'pending',
+    createdAt: new Date(),
+    validatedAt: null,
+    validUntil: null
+  };
+
+  try {
+    await addDoc(collection(db, "payments"), paymentData);
+    console.log("Paiement enregistré avec succès");
+  } catch (error) {
+    console.error("Erreur lors de l'enregistrement du paiement:", error);
+    alert("Erreur lors de l'enregistrement. Veuillez réessayer.");
+  }
+}
+
+// Gestion de l'authentification email/mot de passe
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
+  const name = document.getElementById('signupName').value;
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    // Enregistrer les informations supplémentaires de l'utilisateur
+    await setDoc(doc(db, "users", userCredential.user.uid), {
+      name: name,
+      email: email,
+      createdAt: new Date()
+    });
+    alert("Inscription réussie !");
+    showSection('paiement');
+  } catch (error) {
+    alert("Erreur d'inscription: " + error.message);
+  }
+});
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    alert("Connexion réussie !");
+    // Vérifier si l'utilisateur a déjà payé
+    await verifierStatutPaiement();
+  } catch (error) {
+    alert("Erreur de connexion: " + error.message);
+  }
+});
+
+async function verifierStatutPaiement() {
+  if (!currentUser) return;
+
+  const paymentsQuery = query(
+    collection(db, "payments"),
+    where("userId", "==", currentUser.uid),
+    where("status", "==", "confirmed")
+  );
+
+  const snapshot = await getDocs(paymentsQuery);
+  if (!snapshot.empty) {
+    const payment = snapshot.docs[0].data();
+    const validUntil = payment.validUntil?.toDate();
+    if (validUntil && validUntil > new Date()) {
+      // Accès autorisé - afficher le header et la section leçon
+      document.getElementById('mainHeader').style.display = 'flex';
+      showSection('lecon');
+    } else {
+      // Paiement expiré
+      document.getElementById('mainHeader').style.display = 'none';
+      showSection('paiement');
+    }
+  } else {
+    // Pas de paiement confirmé
+    document.getElementById('mainHeader').style.display = 'none';
+    showSection('paiement');
+  }
+}
+
+// Fonction de déconnexion
+window.deconnexion = async function() {
+  try {
+    await signOut(auth);
+    alert("Déconnexion réussie");
+    document.getElementById('mainHeader').style.display = 'none';
+    showSection('connexion');
+  } catch (error) {
+    console.error("Erreur de déconnexion:", error);
+  }
+}
+
+// Fonction pour afficher/masquer le formulaire de commentaire
+window.toggleCommentInput = function(button, boxId) {
+  const commentInputGroup = document.querySelector(`#${boxId} .comment-input-group`);
+  commentInputGroup.classList.toggle('active');
+  
+  if (commentInputGroup.classList.contains('active')) {
+    commentInputGroup.querySelector('textarea').focus();
+  }
+}
+
+// Fonction pour envoyer un commentaire
+window.sendComment = async function(button, boxId) {
+  if (!currentUser) {
+    alert("Veuillez patienter, connexion en cours...");
+    return;
+  }
+
+  const textarea = button.closest('.comment-input-group').querySelector('textarea');
+  const comment = textarea.value.trim();
+  
+  if (comment) {
+    try {
+      // Enregistrer le commentaire dans Firestore
+      await addDoc(collection(db, "comments"), {
+        contentId: boxId.replace('box-', ''),
+        author: "Utilisateur",
+        userId: currentUser.uid,
+        text: comment,
+        timestamp: new Date(),
+        reactions: {
+          like: 0,
+          heart: 0,
+          laugh: 0
+        },
+        userReactions: {}
+      });
+      
+      // Réinitialiser le champ
+      textarea.value = '';
+      
+      // Masquer le formulaire
+      button.closest('.comment-input-group').classList.remove('active');
+      
+      // Animation de confirmation
+      button.innerHTML = '<i class="fas fa-check"></i>';
+      button.style.background = '#10b981';
+      
+      setTimeout(() => {
+        button.innerHTML = '<i class="fas fa-paper-plane"></i>';
+        button.style.background = '';
+      }, 2000);
+      
+    } catch (error) {
+      console.error("Erreur lors de l'envoi du commentaire:", error);
+      alert("Erreur lors de l'envoi du commentaire. Veuillez réessayer.");
+    }
+  } else {
+    alert('Veuillez écrire un commentaire avant d\'envoyer.');
+  }
+}
+
+// Fonction pour créer un élément commentaire
+function createCommentElement(comment, isNew = false) {
+  const commentDiv = document.createElement('div');
+  commentDiv.className = `comment-item ${isNew ? 'new-comment' : ''}`;
+  commentDiv.innerHTML = `
+    <div class="comment-avatar">${comment.author.charAt(0)}</div>
+    <div class="comment-content">
+      <div class="comment-author">${comment.author} • <small>${new Date(comment.timestamp?.toDate()).toLocaleDateString('fr-FR')}</small></div>
+      <div class="comment-text">${comment.text}</div>
+      <div class="comment-reactions">
+        <button class="reaction-btn ${comment.userReactions && comment.userReactions[currentUser?.uid]?.like ? 'active' : ''}" 
+                onclick="toggleReaction(this, '${comment.id}', 'like')">
+          <i class="${comment.userReactions && comment.userReactions[currentUser?.uid]?.like ? 'fas' : 'far'} fa-thumbs-up"></i> 
+          <span>${comment.reactions?.like || 0}</span>
+        </button>
+        <button class="reaction-btn ${comment.userReactions && comment.userReactions[currentUser?.uid]?.heart ? 'active' : ''}" 
+                onclick="toggleReaction(this, '${comment.id}', 'heart')">
+          <i class="${comment.userReactions && comment.userReactions[currentUser?.uid]?.heart ? 'fas' : 'far'} fa-heart"></i> 
+          <span>${comment.reactions?.heart || 0}</span>
+        </button>
+        <button class="reaction-btn ${comment.userReactions && comment.userReactions[currentUser?.uid]?.laugh ? 'active' : ''}" 
+                onclick="toggleReaction(this, '${comment.id}', 'laugh')">
+          <i class="${comment.userReactions && comment.userReactions[currentUser?.uid]?.laugh ? 'fas' : 'far'} fa-laugh"></i> 
+          <span>${comment.reactions?.laugh || 0}</span>
+        </button>
+      </div>
+    </div>
+  `;
+  return commentDiv;
+}
+
+// Fonction pour les réactions
+window.toggleReaction = async function(button, commentId, reactionType) {
+  if (!currentUser) {
+    alert("Veuillez patienter, connexion en cours...");
+    return;
+  }
+
+  const commentRef = doc(db, "comments", commentId);
+  const userReactionKey = `userReactions.${currentUser.uid}.${reactionType}`;
+  const reactionKey = `reactions.${reactionType}`;
+
+  try {
+    if (button.classList.contains('active')) {
+      // Retirer la réaction
+      await updateDoc(commentRef, {
+        [userReactionKey]: false,
+        [reactionKey]: increment(-1)
+      });
+    } else {
+      // Ajouter la réaction
+      await updateDoc(commentRef, {
+        [userReactionKey]: true,
+        [reactionKey]: increment(1)
+      });
+    }
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour de la réaction:", error);
+  }
+}
+
+// Fonction pour afficher plus de commentaires
+window.showMoreComments = function(button, boxId) {
+  const commentList = document.querySelector(`#${boxId} .comment-list`);
+  const hiddenComments = commentList.querySelectorAll('.comment-item.hidden');
+  
+  hiddenComments.forEach(comment => {
+    comment.classList.remove('hidden');
+    comment.style.display = 'flex';
+  });
+  
+  button.style.display = 'none';
+}
+
+// Fonction pour mettre à jour le badge de notification
+function updateNotificationBadge() {
+  const badge = document.getElementById('notificationBadge');
+  if (notificationCount > 0) {
+    badge.style.display = 'flex';
+    badge.textContent = notificationCount > 99 ? '99+' : notificationCount;
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+// Fonction pour jouer le son de notification
+function playNotificationSound() {
+  const sound = document.getElementById('notificationSound');
+  sound.play().catch(e => console.log('Son de notification non joué:', e));
+}
+
+// Fonction pour charger les commentaires depuis Firestore
+async function loadComments(contentId, boxId) {
+  try {
+    const commentsQuery = query(
+      collection(db, "comments"),
+      where("contentId", "==", contentId.replace('box-', '')),
+      orderBy("timestamp", "desc")
+    );
+    
+    const commentsSnapshot = await getDocs(commentsQuery);
+    const comments = [];
+    
+    commentsSnapshot.forEach(doc => {
+      comments.push({ id: doc.id, ...doc.data() });
+    });
+    
+    return comments;
+  } catch (error) {
+    console.error("Erreur lors du chargement des commentaires:", error);
+    return [];
+  }
+}
+
+function buildBox(data, id){
+  return `<div class="box" id="${id}">
+    <h3>${data.title}</h3>
+    ${data.videoView?`<div class="video-container"><iframe src="${data.videoView}" frameborder="0"></iframe></div>`:""}
+    ${data.videoDownload?`<a class="download-btn" href="${data.videoDownload}" download>📥 Télécharger vidéo</a>`:""}
+    ${data.audioView?`<audio controls src="${data.audioView}" style="width:100%; margin:10px 0;"></audio>`:""}
+    ${data.audioDownload?`<a class="download-btn" href="${data.audioDownload}" download>📥 Télécharger audio</a>`:""}
+    ${data.pdfView?`<iframe src="${data.pdfView}" height="200" style="width:100%; border-radius:8px; margin:10px 0;"></iframe>`:""}
+    ${data.pdfDownload?`<a class="download-btn" href="${data.pdfDownload}" download>📥 Télécharger PDF</a>`:""}
+    ${data.htmlView?`<iframe src="${data.htmlView}" height="200" style="width:100%; border-radius:8px; margin:10px 0;"></iframe>`:""}
+    ${data.htmlDownload?`<a class="download-btn" href="${data.htmlDownload}" download>📥 Télécharger fichier</a>`:""}
+    
+    <!-- Section Commentaires -->
+    <div class="comment-section">
+      <button class="comment-toggle" onclick="toggleCommentInput(this, '${id}')">
+        <i class="far fa-comment"></i> Ajouter un commentaire
+      </button>
+      
+      <div class="comment-input-group">
+        <textarea placeholder="Votre commentaire ici..."></textarea>
+        <button class="send-btn" onclick="sendComment(this, '${id}')">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+      
+      <div class="comment-list" id="comment-list-${id}">
+        <div style="text-align: center; padding: 20px; color: var(--gray);">
+          <i class="fas fa-spinner fa-spin"></i> Chargement des commentaires...
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// Charger les contenus depuis Firestore
+onSnapshot(collection(db,"contents"),async (snap)=>{
+  let leconHTML="", exerciceHTML="", notifHTML="";
+  let currentContentCount = 0;
+  
+  snap.forEach(docSnap=>{
+    currentContentCount++;
+    const d=docSnap.data();
+    const boxId = `box-${docSnap.id}`;
+    const box=buildBox(d, boxId);
+    
+    if(d.type==="lesson") leconHTML+=box;
+    else if(d.type==="exercise") exerciceHTML+=box;
+
+    notifHTML+=`<div class='box new-notification' onclick="showSection('${d.type==='lesson'?'lecon':'exercice'}')">
+      🔔 Nouveau ${d.type}: <b>${d.title}</b>
+    </div>`;
+  });
+  
+  // Vérifier les nouveaux contenus
+  if (currentContentCount > lastContentCount && lastContentCount > 0) {
+    const newItems = currentContentCount - lastContentCount;
+    notificationCount += newItems;
+    updateNotificationBadge();
+    playNotificationSound();
+  }
+  
+  lastContentCount = currentContentCount;
+  
+  document.getElementById("leconList").innerHTML=leconHTML;
+  document.getElementById("exerciceList").innerHTML=exerciceHTML;
+  document.getElementById("notifList").innerHTML=notifHTML;
+
+  // Charger les commentaires pour chaque box
+  snap.forEach(async (docSnap) => {
+    const boxId = `box-${docSnap.id}`;
+    const comments = await loadComments(boxId, boxId);
+    const commentList = document.querySelector(`#${boxId} .comment-list`);
+    
+    if (comments.length === 0) {
+      commentList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--gray);">Aucun commentaire pour le moment</div>';
+    } else {
+      let commentsHTML = '';
+      comments.forEach((comment, index) => {
+        const hiddenClass = index >= 3 ? 'hidden' : '';
+        commentsHTML += `
+          <div class="comment-item ${hiddenClass}" ${hiddenClass ? 'style="display: none;"' : ''}>
+            <div class="comment-avatar">${comment.author.charAt(0)}</div>
+            <div class="comment-content">
+              <div class="comment-author">${comment.author} • <small>${new Date(comment.timestamp?.toDate()).toLocaleDateString('fr-FR')}</small></div>
+              <div class="comment-text">${comment.text}</div>
+              <div class="comment-reactions">
+                <button class="reaction-btn ${comment.userReactions && comment.userReactions[currentUser?.uid]?.like ? 'active' : ''}" 
+                        onclick="toggleReaction(this, '${comment.id}', 'like')">
+                  <i class="${comment.userReactions && comment.userReactions[currentUser?.uid]?.like ? 'fas' : 'far'} fa-thumbs-up"></i> 
+                  <span>${comment.reactions?.like || 0}</span>
+                </button>
+                <button class="reaction-btn ${comment.userReactions && comment.userReactions[currentUser?.uid]?.heart ? 'active' : ''}" 
+                        onclick="toggleReaction(this, '${comment.id}', 'heart')">
+                  <i class="${comment.userReactions && comment.userReactions[currentUser?.uid]?.heart ? 'fas' : 'far'} fa-heart"></i> 
+                  <span>${comment.reactions?.heart || 0}</span>
+                </button>
+                <button class="reaction-btn ${comment.userReactions && comment.userReactions[currentUser?.uid]?.laugh ? 'active' : ''}" 
+                        onclick="toggleReaction(this, '${comment.id}', 'laugh')">
+                  <i class="${comment.userReactions && comment.userReactions[currentUser?.uid]?.laugh ? 'fas' : 'far'} fa-laugh"></i> 
+                  <span>${comment.reactions?.laugh || 0}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      const showMoreButton = comments.length > 3 ? 
+        `<button class="voir-plus-btn" onclick="showMoreComments(this, '${boxId}')">
+          Voir plus de commentaires (${comments.length - 3})
+        </button>` : '';
+      
+      commentList.innerHTML = commentsHTML + showMoreButton;
+    }
+  });
+});
+
+// Écouter les nouveaux commentaires en temps réel
+onSnapshot(collection(db, "comments"), (snapshot) => {
+  snapshot.docChanges().forEach((change) => {
+    if (change.type === "added") {
+      const commentData = change.doc.data();
+      const contentId = commentData.contentId;
+      const boxId = `box-${contentId}`;
+      const commentList = document.querySelector(`#${boxId} .comment-list`);
+      
+      if (commentList) {
+        // Créer le nouvel élément commentaire
+        const newCommentElement = createCommentElement({
+          id: change.doc.id,
+          ...commentData
+        }, true);
+        
+        // Ajouter le nouveau commentaire EN BAS de la liste
+        commentList.appendChild(newCommentElement);
+        
+        // Mettre à jour le compteur "Voir plus" si nécessaire
+        const voirPlusBtn = commentList.querySelector('.voir-plus-btn');
+        if (voirPlusBtn) {
+          const currentCount = parseInt(voirPlusBtn.textContent.match(/\((\d+)\)/)[1]);
+          voirPlusBtn.textContent = `Voir plus de commentaires (${currentCount + 1})`;
+        }
+        
+        // Si c'est le premier commentaire, supprimer le message "Aucun commentaire"
+        const noCommentsMsg = commentList.querySelector('div');
+        if (noCommentsMsg && noCommentsMsg.textContent.includes('Aucun commentaire')) {
+          noCommentsMsg.remove();
+        }
+      }
+    }
+  });
+});
+
+// Écouter les mises à jour des réactions en temps réel
+onSnapshot(collection(db, "comments"), (snapshot) => {
+  snapshot.docChanges().forEach((change) => {
+    if (change.type === "modified") {
+      const commentData = change.doc.data();
+      const commentId = change.doc.id;
+      const commentElement = document.querySelector(`.comment-item .comment-content .comment-reactions`);
+      
+      // Mettre à jour les compteurs de réactions
+      const reactionButtons = document.querySelectorAll(`.comment-item`);
+      reactionButtons.forEach(commentItem => {
+        const likeBtn = commentItem.querySelector('.reaction-btn:nth-child(1)');
+        const heartBtn = commentItem.querySelector('.reaction-btn:nth-child(2)');
+        const laughBtn = commentItem.querySelector('.reaction-btn:nth-child(3)');
+        
+        if (likeBtn) likeBtn.querySelector('span').textContent = commentData.reactions?.like || 0;
+        if (heartBtn) heartBtn.querySelector('span').textContent = commentData.reactions?.heart || 0;
+        if (laughBtn) laughBtn.querySelector('span').textContent = commentData.reactions?.laugh || 0;
+      });
+    }
+  });
+});
+
+// Gestion de l'authentification
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    console.log("Utilisateur connecté:", user.uid);
+    
+    // Vérifier le statut de paiement
+    await verifierStatutPaiement();
+  } else {
+    // Aucun utilisateur connecté, afficher la page de connexion
+    document.getElementById('mainHeader').style.display = 'none';
+    showSection('connexion');
+  }
+});
+
+// Au chargement de la page, afficher la section d'inscription
+window.onload = function() {
+  showSection('inscription');
+};
+</script>
+</body>
+</html>
