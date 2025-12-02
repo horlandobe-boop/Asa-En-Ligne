@@ -1,439 +1,1286 @@
 <!DOCTYPE html>
-<html lang="mg">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FANASANA MANETRIKETRIKA - OPÉRATION CAKE</title>
+    <title>ASA EN LIGNE - Assistant Intelligent</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        @page {
-            size: A4;
-            margin: 0;
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #4a7bc8;
+            --accent-color: #ff6b4a;
+            --light-color: #f8fafc;
+            --dark-color: #2d3748;
+            --success-color: #38a169;
+            --warning-color: #d69e2e;
+            --danger-color: #e53e3e;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, #2c5aa0 0%, #4a7bc8 100%);
         }
-        
-        body {
-            font-family: 'Arial', 'Segoe UI', sans-serif;
+
+        * {
             margin: 0;
-            padding: 8px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark-color);
+            line-height: 1.6;
             min-height: 100vh;
         }
-        
-        .controls {
-            text-align: center;
-            margin-bottom: 8px;
-            padding: 6px;
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        
-        .btn {
-            background: #2c5530;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 10px;
-            font-weight: bold;
-            margin: 0 3px;
-            transition: all 0.3s ease;
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .logo::before, .logo::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .logo::before {
+            left: -10px;
+        }
+
+        .logo::after {
+            right: -10px;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .status-indicator {
             display: inline-flex;
             align-items: center;
-            gap: 3px;
-        }
-        
-        .btn:hover {
-            background: #d4af37;
-            transform: translateY(-1px);
-        }
-        
-        .pdf-container {
-            background: white;
-            width: 210mm;
-            min-height: 297mm;
-            padding: 6px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            border-radius: 6px;
-            position: relative;
-            border: 1.5px solid #2c5530;
-            margin: 0 auto;
-        }
-        
-        .two-columns {
-            display: flex;
-            gap: 3px;
-            height: 100%;
-        }
-        
-        .column {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        
-        .invitation-card {
-            background: white;
-            border: 1px solid #d4af37;
-            border-radius: 4px;
-            padding: 4px;
-            position: relative;
-            page-break-inside: avoid;
-            break-inside: avoid;
-            font-size: 7px;
-            line-height: 1.05;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 85px;
-            box-shadow: 0 0.5px 1px rgba(0,0,0,0.05);
-        }
-        
-        .cut-line {
-            border-top: 0.5px dashed #ccc;
-            margin: 1px 0;
-            padding-top: 1px;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 2px;
-        }
-        
-        .main-title {
-            font-size: 7.5px;
-            font-weight: bold;
-            color: #2c5530;
-            margin-bottom: 1px;
-            text-transform: uppercase;
-            letter-spacing: 0.1px;
-        }
-        
-        .content {
-            text-align: justify;
-            flex-grow: 1;
-        }
-        
-        .greeting {
-            font-size: 7px;
-            color: #2c5530;
-            font-weight: bold;
-            text-align: center;
-            margin: 1px 0;
-            font-style: italic;
-        }
-        
-        .support-text {
-            font-style: italic;
-            color: #555;
-            text-align: center;
-            margin: 1px 0;
-            padding: 1px;
-            background: white;
-            border-radius: 1px;
-            font-size: 6.5px;
-        }
-        
-        .price-section {
-            text-align: center;
-            margin: 2px 0;
-            padding: 2px;
             background: #e8f5e8;
-            border-radius: 2px;
-            border: 0.3px solid #d4af37;
+            color: #2e7d32;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 10px;
         }
-        
-        .price {
-            font-size: 8px;
-            font-weight: bold;
-            color: #d4af37;
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #2e7d32;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 70vh;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: #f8fafc;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: messageAppear 0.3s ease forwards;
+        }
+
+        @keyframes messageAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: var(--gradient);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 5px;
+            color: var(--dark-color);
+        }
+
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--gradient);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            font-size: 1.2rem;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 20px;
+            background-color: white;
+            border-top: 1px solid #e2e8f0;
+            gap: 15px;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            outline: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .message-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+        }
+
+        .send-btn {
+            padding: 15px 25px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 90, 160, 0.3);
+        }
+
+        .question-buttons {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 20px;
+            background-color: white;
+            border-top: 1px solid #e2e8f0;
+            scrollbar-width: thin;
+        }
+
+        .question-btn {
+            padding: 12px 20px;
+            background: white;
+            color: var(--primary-color);
+            border: 1px solid #e2e8f0;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-weight: 500;
+        }
+
+        .question-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* ADMIN STYLES */
+        .admin-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .admin-title {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .admin-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 90, 160, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: var(--dark-color);
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #2f855a;
+            transform: translateY(-2px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
             display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
         }
-        
-        .date {
-            font-size: 7px;
-            color: #2c5530;
-            font-weight: bold;
-            display: block;
-            margin-top: 0.5px;
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8fafc;
         }
-        
-        .blessing {
-            font-size: 7px;
-            color: #2c5530;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 2px;
-            padding-top: 1px;
-            border-top: 0.3px solid #e0e0e0;
-            font-style: italic;
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+            outline: none;
         }
-        
-        .footer {
-            text-align: center;
-            color: #666;
-            font-size: 5px;
-            margin-top: 1px;
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
         }
-        
-        .church-info {
-            font-weight: bold;
-            color: #2c5530;
+
+        .questions-list {
+            margin-top: 40px;
         }
-        
-        .images-container {
-            position: absolute;
+
+        .questions-list h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .question-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .question-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .answer-text {
+            color: var(--dark-color);
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        /* Admin Login */
+        .admin-login {
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 1;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
         }
-        
-        .cake-img {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            opacity: 0.04;
-        }
-        
-        .bird-img {
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            opacity: 0.04;
-        }
-        
-        /* Positions pour les images de fond */
-        .pos-1 { top: 4%; left: 4%; }
-        .pos-2 { top: 16%; right: 4%; }
-        .pos-3 { top: 28%; left: 6%; }
-        .pos-4 { top: 40%; right: 6%; }
-        .pos-5 { top: 52%; left: 4%; }
-        .pos-6 { top: 64%; right: 4%; }
-        .pos-7 { top: 76%; left: 6%; }
-        .pos-8 { top: 88%; right: 6%; }
-        .pos-9 { top: 6%; right: 8%; }
-        .pos-10 { top: 18%; left: 8%; }
 
-        @media print {
-            body {
-                background: white;
-                padding: 0;
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-title {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .login-error {
+            background: #fed7d7;
+            color: var(--danger-color);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* Switch between User and Admin */
+        .mode-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .mode-btn {
+            padding: 8px 20px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Scrollbar styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .question-buttons {
+                flex-direction: row;
             }
             
-            .controls {
-                display: none;
+            .message {
+                max-width: 90%;
             }
             
-            .pdf-container {
-                box-shadow: none;
-                border: 1px solid #2c5530;
+            .logo {
+                font-size: 2rem;
+            }
+            
+            header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .admin-actions {
                 width: 100%;
-                min-height: 100vh;
-                padding: 3px;
-                border-radius: 3px;
+                justify-content: space-between;
             }
             
-            .invitation-card {
-                border: 1px solid #d4af37;
-                border-radius: 3px;
+            .mode-switch {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 15px;
+                align-self: flex-end;
             }
-        }
-
-        .download-info {
-            margin-top: 3px;
-            font-size: 8px;
-            color: #666;
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
-    <div class="controls">
-        <button class="btn" onclick="downloadPDF()">
-            <i class="fas fa-file-pdf"></i> Télécharger PDF
-        </button>
-        <button class="btn" onclick="downloadWord()">
-            <i class="fas fa-file-word"></i> Télécharger Word
-        </button>
-        <button class="btn" onclick="printDocument()">
-            <i class="fas fa-print"></i> Imprimer
-        </button>
-        <div class="download-info">
-            💡 10 invitations par page (5 à gauche, 5 à droite) - Prêtes à découper
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <div class="logo">ASA EN LIGNE</div>
+            </div>
+            <p class="tagline">Votre partenaire digital de confiance</p>
+            <h1>Assistant Intelligent Automatique</h1>
+            <p>Posez vos questions et obtenez des réponses instantanées</p>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                En ligne - Prêt à vous aider
+            </div>
+            
+            <div class="mode-switch">
+                <button class="mode-btn" id="adminModeBtn">
+                    <i class="fas fa-user-shield"></i> Mode Admin
+                </button>
+            </div>
+        </header>
+
+        <!-- Interface Utilisateur (par défaut) -->
+        <div id="userInterface">
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot-message">
+                        <strong>Salama tompoko!</strong> 👋 Comment puis-je vous aider aujourd'hui? Sélectionnez une question ci-dessous ou écrivez votre propre message.
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <input type="text" class="message-input" id="messageInput" placeholder="Tapez votre message ici...">
+                    <button class="send-btn" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i> Envoyer
+                    </button>
+                </div>
+
+                <div class="question-buttons" id="questionButtons">
+                    <!-- Les boutons de questions seront générés dynamiquement -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Interface Admin (cachée par défaut) -->
+        <div class="admin-container" id="adminInterface">
+            <div class="admin-header">
+                <h2 class="admin-title">
+                    <i class="fas fa-user-shield"></i> Administration des Questions
+                </h2>
+                <div class="admin-actions">
+                    <button class="admin-btn btn-secondary" id="backToUserBtn">
+                        <i class="fas fa-arrow-left"></i> Retour au Chat
+                    </button>
+                    <button class="admin-btn btn-primary" id="addQuestionBtn">
+                        <i class="fas fa-plus"></i> Ajouter Question
+                    </button>
+                </div>
+            </div>
+
+            <!-- Formulaire d'ajout/modification -->
+            <div id="questionFormContainer" style="display: none;">
+                <h3 id="formTitle">Ajouter une nouvelle question</h3>
+                <form id="questionForm">
+                    <input type="hidden" id="questionId">
+                    
+                    <div class="form-group">
+                        <label for="questionInput">Question:</label>
+                        <input type="text" id="questionInput" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="answerInput">Réponse:</label>
+                        <textarea id="answerInput" class="form-control" required></textarea>
+                    </div>
+                    
+                    <div class="admin-actions">
+                        <button type="submit" class="admin-btn btn-success">
+                            <i class="fas fa-save"></i> Enregistrer
+                        </button>
+                        <button type="button" class="admin-btn btn-secondary" id="cancelFormBtn">
+                            <i class="fas fa-times"></i> Annuler
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Liste des questions -->
+            <div class="questions-list">
+                <h3>
+                    <i class="fas fa-list"></i> Liste des Questions
+                    <span id="questionsCount" class="status-indicator" style="font-size: 0.8rem; margin-left: 10px;"></span>
+                </h3>
+                <div id="questionsList">
+                    <!-- Les questions seront chargées ici -->
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="pdf-container" id="contentToConvert">
-        <div class="images-container" id="backgroundImages">
-            <!-- Les images de fond seront ajoutées dynamiquement -->
-        </div>
-        
-        <div class="two-columns" id="invitationsContainer">
-            <!-- Les invitations seront générées dynamiquement dans deux colonnes -->
+    <!-- Fenêtre de connexion admin -->
+    <div class="admin-login" id="adminLogin">
+        <div class="login-box">
+            <h2 class="login-title">
+                <i class="fas fa-lock"></i> Connexion Admin
+            </h2>
+            <div class="login-error" id="loginError">
+                Mot de passe incorrect!
+            </div>
+            <div class="form-group">
+                <label for="adminPassword">Mot de passe:</label>
+                <input type="password" id="adminPassword" class="form-control" placeholder="Entrez le mot de passe admin">
+            </div>
+            <div class="admin-actions">
+                <button class="admin-btn btn-primary" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                </button>
+                <button class="admin-btn btn-secondary" id="cancelLoginBtn">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.9rem; color: #666; text-align: center;">
+                Mot de passe par défaut: <strong>adminxxx</strong>
+            </p>
         </div>
     </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-bell notification-icon"></i>
+        <span>Nouveau message reçu!</span>
+    </div>
+
+    <!-- Audio pour la notification sonore -->
+    <audio id="notificationSound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        // Générer 10 invitations (5 par colonne)
-        function generateInvitations() {
-            const container = document.getElementById('invitationsContainer');
-            const backgroundContainer = document.getElementById('backgroundImages');
-            
-            // Vider les conteneurs
-            container.innerHTML = '';
-            backgroundContainer.innerHTML = '';
-            
-            // Créer les deux colonnes
-            const leftColumn = document.createElement('div');
-            leftColumn.className = 'column';
-            
-            const rightColumn = document.createElement('div');
-            rightColumn.className = 'column';
-            
-            // Générer 10 invitations (5 pour chaque colonne)
-            for (let i = 1; i <= 10; i++) {
-                const invitation = document.createElement('div');
-                invitation.className = 'invitation-card';
-                invitation.innerHTML = `
-                    <div class="header">
-                        <div class="main-title">OPÉRATION CAKE</div>
-                    </div>
-                    
-                    <div class="content">
-                        <div class="greeting">
-                            "Miarahaba amin'ny anaran'i Jesosy Kristy!"
-                        </div>
-                        
-                        <div class="support-text">
-                            Izahay sampana vehivavy mendrika ao amin'ny Fiangonana 
-                            Assemblée de Dieu Antalaha Ambondrona dia manasa anao
-                            handray anjara amin'ny <strong>OPÉRATION CAKE</strong>.
-                        </div>
+        // Configuration EmailJS
+        emailjs.init("LE7QYti5hRGIfM31l");
 
-                        <div class="price-section">
-                            <span class="date">13 Décembre 2025</span>
-                            <span class="price">10,000 Ar</span>
-                        </div>
-                        
-                        <div class="blessing">
-                            "Andriamanitra anie hitahy anao"
-                        </div>
-                    </div>
-                   
-                    ${i < 10 ? '<div class="cut-line"></div>' : ''}
-                `;
-                
-                // Ajouter à la colonne gauche ou droite
-                if (i <= 5) {
-                    leftColumn.appendChild(invitation);
-                } else {
-                    rightColumn.appendChild(invitation);
-                }
-                
-                // Ajouter des images de fond
-                if (i <= 10) {
-                    const cakeImg = document.createElement('img');
-                    cakeImg.className = `cake-img pos-${i}`;
-                    cakeImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%232c5530' d='M21 10.5V11C21 12.11 20.11 13 19 13H13V19H15V21H9V19H11V13H5C3.89 13 3 12.11 3 11V10.5C3 10.22 3.22 10 3.5 10H9V7H7V5H17V7H15V10H20.5C20.78 10 21 10.22 21 10.5M12 2C12.28 2 12.5 2.22 12.5 2.5V5.5C12.5 5.78 12.28 6 12 6C11.72 6 11.5 5.78 11.5 5.5V2.5C11.5 2.22 11.72 2 12 2Z'/%3E%3C/svg%3E";
-                    cakeImg.alt = "Cake";
-                    
-                    const birdImg = document.createElement('img');
-                    birdImg.className = `bird-img pos-${i}`;
-                    birdImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%232c5530' d='M23 11.5L19.95 10.37C19.69 9.22 19.04 8.56 19.04 8.56C17.44 7 15.38 7 15.38 7S14.44 7.13 13.5 7.5L12 6L10.5 7.5C9.56 7.13 8.62 7 8.62 7S6.56 7 5 8.56C5 8.56 4.31 9.22 4.05 10.37L1 11.5L3.43 12.86C3.32 13.5 3.32 14.5 3.43 15.14L1 16.5L4.05 17.63C4.31 18.78 5 19.44 5 19.44C6.56 21 8.62 21 8.62 21S9.56 20.87 10.5 20.5L12 22L13.5 20.5C14.44 20.87 15.38 21 15.38 21S17.44 21 19 19.44C19 19.44 19.69 18.78 19.95 17.63L23 16.5L20.57 15.14C20.68 14.5 20.68 13.5 20.57 12.86L23 11.5M12 15.5C10.62 15.5 9.5 14.38 9.5 13S10.62 10.5 12 10.5S14.5 11.62 14.5 13S13.38 15.5 12 15.5Z'/%3E%3C/svg%3E";
-                    birdImg.alt = "Oiseau";
-                    
-                    backgroundContainer.appendChild(cakeImg);
-                    backgroundContainer.appendChild(birdImg);
-                }
-            }
-            
-            // Ajouter les colonnes au conteneur principal
-            container.appendChild(leftColumn);
-            container.appendChild(rightColumn);
-        }
+        // Données initiales (questions par défaut)
+        const defaultQuestions = [
+            { id: 1, question: "Quels sont vos services?", response: "Nous proposons des solutions de développement web, création d'applications, et assistance technique." },
+            { id: 2, question: "Comment puis-je commander un site web?", response: "Vous pouvez commander un site web en nous contactant au 0323911654." },
+            { id: 3, question: "Quels sont vos tarifs?", response: "Nos tarifs varient selon le projet. Contactez-nous pour un devis personnalisé." },
+            { id: 4, question: "Dans quelles régions intervenez-vous?", response: "Nous intervenons principalement dans la région SAVA, mais pouvons travailler à distance partout à Madagascar." },
+            { id: 5, question: "Quel est votre délai de livraison?", response: "Le délai dépend de la complexité du projet, généralement entre 2 et 6 semaines." },
+            { id: 6, question: "Proposez-vous une assistance après livraison?", response: "Oui, nous offrons une assistance technique pendant 3 mois après la livraison du projet." },
+            { id: 7, question: "Quelles technologies utilisez-vous?", response: "Nous utilisons les dernières technologies web: HTML5, CSS3, JavaScript, React, Node.js, et bases de données Firebase." },
+            { id: 8, question: "Pouvez-vous refaire un site existant?", response: "Oui, nous pouvons refondre ou améliorer un site web existant." },
+            { id: 9, question: "Proposez-vous des formations?", response: "Oui, nous proposons des formations en développement web et utilisation d'outils numériques." },
+            { id: 10, question: "Comment vous contacter?", response: "Vous pouvez nous contacter par WhatsApp au +261384557584 ou par appel au 0323911654." }
+        ];
 
-        // Télécharger en PDF avec configuration optimisée
-        function downloadPDF() {
-            const element = document.getElementById('contentToConvert');
-            const opt = {
-                margin: 2,
-                filename: 'operation_cake_invitations.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 3,
-                    useCORS: true,
-                    logging: false
-                },
-                jsPDF: { 
-                    unit: 'mm', 
-                    format: 'a4', 
-                    orientation: 'portrait',
-                    compress: true
-                }
-            };
+        // Éléments DOM
+        const chatMessages = document.getElementById('chatMessages');
+        const questionButtons = document.getElementById('questionButtons');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const notification = document.getElementById('notification');
+        const notificationSound = document.getElementById('notificationSound');
+        
+        // Éléments Admin
+        const adminModeBtn = document.getElementById('adminModeBtn');
+        const backToUserBtn = document.getElementById('backToUserBtn');
+        const addQuestionBtn = document.getElementById('addQuestionBtn');
+        const adminInterface = document.getElementById('adminInterface');
+        const userInterface = document.getElementById('userInterface');
+        const adminLogin = document.getElementById('adminLogin');
+        const loginBtn = document.getElementById('loginBtn');
+        const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+        const adminPassword = document.getElementById('adminPassword');
+        const loginError = document.getElementById('loginError');
+        
+        // Éléments Formulaire Admin
+        const questionFormContainer = document.getElementById('questionFormContainer');
+        const questionForm = document.getElementById('questionForm');
+        const questionIdInput = document.getElementById('questionId');
+        const questionInput = document.getElementById('questionInput');
+        const answerInput = document.getElementById('answerInput');
+        const cancelFormBtn = document.getElementById('cancelFormBtn');
+        const formTitle = document.getElementById('formTitle');
+        
+        // Éléments Liste Questions
+        const questionsList = document.getElementById('questionsList');
+        const questionsCount = document.getElementById('questionsCount');
 
-            // Ajouter un délai pour s'assurer que tout est chargé
-            setTimeout(() => {
-                html2pdf().set(opt).from(element).save();
-            }, 500);
-        }
+        // Variables globales
+        let questions = [];
+        let isAdminMode = false;
+        let editMode = false;
 
-        // Télécharger en Word (approximation avec HTML)
-        function downloadWord() {
-            const content = document.getElementById('contentToConvert').innerHTML;
-            const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
-            const footer = "</body></html>";
-            const sourceHTML = header + content + footer;
-            
-            const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
-            const downloadLink = document.createElement("a");
-            
-            document.body.appendChild(downloadLink);
-            
-            downloadLink.href = source;
-            downloadLink.download = 'operation_cake_invitations.doc';
-            downloadLink.click();
-            
-            document.body.removeChild(downloadLink);
-        }
+        // Mot de passe admin (peut être changé)
+        const ADMIN_PASSWORD = "admin123";
 
-        // Imprimer le document
-        function printDocument() {
-            window.print();
-        }
-
-        // Générer les invitations au chargement de la page
+        // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
-            generateInvitations();
+            loadQuestions();
+            generateQuestionButtons();
+            generateQuestionsList();
             
-            // Ajouter la date actuelle
-            const today = new Date();
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            const dateString = today.toLocaleDateString('mg-MG', options);
+            // Événements
+            sendBtn.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendMessage();
+            });
             
-            const dateElement = document.createElement('div');
-            dateElement.style.textAlign = 'center';
-            dateElement.style.marginTop = '3px';
-            dateElement.style.color = '#666';
-            dateElement.style.fontSize = '7px';
-            dateElement.textContent = `Nosoratan'ny ${dateString}`;
-            
-            document.querySelector('.controls').appendChild(dateElement);
+            // Événements Admin
+            adminModeBtn.addEventListener('click', showAdminLogin);
+            backToUserBtn.addEventListener('click', switchToUserMode);
+            addQuestionBtn.addEventListener('click', showAddForm);
+            cancelFormBtn.addEventListener('click', hideForm);
+            questionForm.addEventListener('submit', saveQuestion);
+            loginBtn.addEventListener('click', loginAdmin);
+            cancelLoginBtn.addEventListener('click', hideAdminLogin);
+            adminPassword.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') loginAdmin();
+            });
         });
 
-        // Optimiser l'impression
-        window.onbeforeprint = function() {
-            document.body.style.background = 'white';
-        };
-        
-        window.onafterprint = function() {
-            document.body.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
-        };
+        // ===== FONCTIONS UTILISATEUR =====
+
+        // Charger les questions depuis le localStorage
+        function loadQuestions() {
+            const savedQuestions = localStorage.getItem('asa_questions');
+            if (savedQuestions) {
+                questions = JSON.parse(savedQuestions);
+            } else {
+                questions = [...defaultQuestions];
+                saveQuestions();
+            }
+        }
+
+        // Sauvegarder les questions dans le localStorage
+        function saveQuestions() {
+            localStorage.setItem('asa_questions', JSON.stringify(questions));
+        }
+
+        // Générer les boutons de questions
+        function generateQuestionButtons() {
+            questionButtons.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const button = document.createElement('button');
+                button.className = 'question-btn';
+                button.textContent = q.question;
+                button.dataset.id = q.id;
+                
+                button.addEventListener('click', () => handleQuestionClick(q));
+                questionButtons.appendChild(button);
+            });
+            
+            // Bouton informations du créateur
+            const infoButton = document.createElement('button');
+            infoButton.className = 'question-btn info-btn';
+            infoButton.innerHTML = '<i class="fas fa-user-circle"></i> Informations du créateur';
+            infoButton.addEventListener('click', showCreatorInfo);
+            questionButtons.appendChild(infoButton);
+        }
+
+        // Gérer le clic sur une question
+        function handleQuestionClick(question) {
+            // Ajouter la question comme message de l'utilisateur
+            addMessage(question.question, 'user');
+            
+            // Afficher l'indicateur de frappe
+            const typingIndicator = showTypingIndicator();
+            
+            // Ajouter la réponse après 2 secondes
+            setTimeout(() => {
+                typingIndicator.remove();
+                addMessage(question.response, 'bot');
+                showNotification();
+            }, 2000);
+        }
+
+        // Afficher l'indicateur de frappe
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot-message typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return typingDiv;
+        }
+
+        // Afficher une notification
+        function showNotification() {
+            notification.classList.add('show');
+            notificationSound.play();
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Ajouter un message au chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Envoyer un message
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessage(message, 'user');
+                messageInput.value = '';
+                
+                // Si le message n'est pas une question prédéfinie
+                const isPredefinedQuestion = questions.some(q => 
+                    q.question.toLowerCase() === message.toLowerCase()
+                );
+                
+                if (!isPredefinedQuestion) {
+                    const typingIndicator = showTypingIndicator();
+                    
+                    setTimeout(() => {
+                        typingIndicator.remove();
+                        addMessage("Je vois que vous avez une question personnalisée. Veuillez remplir le formulaire ci-dessous pour que nous puissions vous répondre par email.", 'bot');
+                        showContactForm();
+                        showNotification();
+                    }, 2000);
+                } else {
+                    const typingIndicator = showTypingIndicator();
+                    const question = questions.find(q => 
+                        q.question.toLowerCase() === message.toLowerCase()
+                    );
+                    if (question) {
+                        setTimeout(() => {
+                            typingIndicator.remove();
+                            addMessage(question.response, 'bot');
+                            showNotification();
+                        }, 2000);
+                    }
+                }
+            }
+        }
+
+        // Afficher les informations du créateur
+        function showCreatorInfo() {
+            addMessage("Informations du créateur", 'user');
+            const typingIndicator = showTypingIndicator();
+            
+            setTimeout(() => {
+                typingIndicator.remove();
+                
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'info-in-chat';
+                
+                infoDiv.innerHTML = `
+                    <h3>Informations du Créateur</h3>
+                    <div class="info-item">
+                        <span class="info-label">Nom du créateur:</span>
+                        <span>RAVELOMANANTSOA Urmin</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Lieu de résidence:</span>
+                        <span>Région SAVA, District d'Antalaha</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Contact WhatsApp:</span>
+                        <span>+261384557584</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Appel:</span>
+                        <span>0323911654</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Commander un site?</span>
+                        <span>Appelez le 0323911654</span>
+                    </div>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/profile.php?id=61551172526221" target="_blank" class="social-icon">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </div>
+                `;
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message bot-message';
+                messageDiv.textContent = "Voici les informations du créateur. Vous pouvez le contacter pour toute question ou commande.";
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.appendChild(infoDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                showNotification();
+            }, 2000);
+        }
+
+        // Afficher le formulaire de contact
+        function showContactForm() {
+            const formDiv = document.createElement('div');
+            formDiv.className = 'form-in-chat';
+            
+            formDiv.innerHTML = `
+                <h3>Envoyer un message</h3>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="email">Votre email:</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Objet:</label>
+                        <input type="text" id="subject" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="messageContent">Message:</label>
+                        <textarea id="messageContent" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="file">Image ou fichier (optionnel):</label>
+                        <input type="file" id="file" class="form-control">
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> Envoyer le message
+                    </button>
+                </form>
+                <div id="emailStatus"></div>
+            `;
+            
+            chatMessages.appendChild(formDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            const contactForm = document.getElementById('contactForm');
+            const emailStatus = document.getElementById('emailStatus');
+            
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const subject = document.getElementById('subject').value;
+                const messageContent = document.getElementById('messageContent').value;
+                
+                emailStatus.className = 'email-status email-sending';
+                emailStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+                
+                const templateParams = {
+                    from_name: email.split('@')[0] || 'Visiteur',
+                    from_email: email,
+                    subject: subject,
+                    message: messageContent,
+                    reply_to: email
+                };
+                
+                emailjs.send('service_d2gw43d', 'template_f6qu6sq', templateParams)
+                    .then(function(response) {
+                        console.log('Email envoyé avec succès!', response.status, response.text);
+                        
+                        emailStatus.className = 'email-status email-sent';
+                        emailStatus.innerHTML = '<i class="fas fa-check-circle"></i> Email envoyé avec succès! Nous vous répondrons bientôt.';
+                        
+                        addMessage("Votre message a été envoyé avec succès! Nous vous répondrons bientôt.", 'bot');
+                        showNotification();
+                        
+                        contactForm.reset();
+                        
+                        setTimeout(() => {
+                            formDiv.remove();
+                        }, 3000);
+                    }, function(error) {
+                        console.log('Erreur lors de l\'envoi de l\'email:', error);
+                        
+                        emailStatus.className = 'email-status email-error';
+                        emailStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> Erreur lors de l\'envoi. Veuillez réessayer.';
+                    });
+            });
+        }
+
+        // ===== FONCTIONS ADMIN =====
+
+        // Afficher la fenêtre de connexion admin
+        function showAdminLogin() {
+            adminLogin.style.display = 'flex';
+            adminPassword.focus();
+        }
+
+        // Cacher la fenêtre de connexion admin
+        function hideAdminLogin() {
+            adminLogin.style.display = 'none';
+            loginError.style.display = 'none';
+            adminPassword.value = '';
+        }
+
+        // Connexion admin
+        function loginAdmin() {
+            const password = adminPassword.value.trim();
+            
+            if (password === ADMIN_PASSWORD) {
+                isAdminMode = true;
+                hideAdminLogin();
+                switchToAdminMode();
+            } else {
+                loginError.style.display = 'block';
+                adminPassword.value = '';
+                adminPassword.focus();
+            }
+        }
+
+        // Passer en mode admin
+        function switchToAdminMode() {
+            userInterface.style.display = 'none';
+            adminInterface.style.display = 'block';
+            adminModeBtn.innerHTML = '<i class="fas fa-comments"></i> Mode Utilisateur';
+            adminModeBtn.removeEventListener('click', showAdminLogin);
+            adminModeBtn.addEventListener('click', switchToUserMode);
+        }
+
+        // Revenir au mode utilisateur
+        function switchToUserMode() {
+            userInterface.style.display = 'block';
+            adminInterface.style.display = 'none';
+            hideForm();
+            adminModeBtn.innerHTML = '<i class="fas fa-user-shield"></i> Mode Admin';
+            adminModeBtn.removeEventListener('click', switchToUserMode);
+            adminModeBtn.addEventListener('click', showAdminLogin);
+        }
+
+        // Afficher le formulaire d'ajout
+        function showAddForm() {
+            editMode = false;
+            formTitle.textContent = "Ajouter une nouvelle question";
+            questionIdInput.value = '';
+            questionInput.value = '';
+            answerInput.value = '';
+            questionFormContainer.style.display = 'block';
+            questionInput.focus();
+        }
+
+        // Afficher le formulaire de modification
+        function showEditForm(question) {
+            editMode = true;
+            formTitle.textContent = "Modifier la question";
+            questionIdInput.value = question.id;
+            questionInput.value = question.question;
+            answerInput.value = question.response;
+            questionFormContainer.style.display = 'block';
+            questionInput.focus();
+        }
+
+        // Cacher le formulaire
+        function hideForm() {
+            questionFormContainer.style.display = 'none';
+        }
+
+        // Sauvegarder une question (ajout ou modification)
+        function saveQuestion(e) {
+            e.preventDefault();
+            
+            const questionText = questionInput.value.trim();
+            const answerText = answerInput.value.trim();
+            
+            if (!questionText || !answerText) {
+                alert('Veuillez remplir tous les champs!');
+                return;
+            }
+            
+            if (editMode) {
+                // Modification
+                const questionId = parseInt(questionIdInput.value);
+                const index = questions.findIndex(q => q.id === questionId);
+                
+                if (index !== -1) {
+                    questions[index] = {
+                        id: questionId,
+                        question: questionText,
+                        response: answerText
+                    };
+                }
+            } else {
+                // Ajout
+                const newId = questions.length > 0 ? Math.max(...questions.map(q => q.id)) + 1 : 1;
+                questions.push({
+                    id: newId,
+                    question: questionText,
+                    response: answerText
+                });
+            }
+            
+            // Sauvegarder dans le localStorage
+            saveQuestions();
+            
+            // Regénérer les interfaces
+            generateQuestionButtons();
+            generateQuestionsList();
+            
+            // Cacher le formulaire
+            hideForm();
+            
+            // Afficher une notification
+            alert(editMode ? 'Question modifiée avec succès!' : 'Question ajoutée avec succès!');
+        }
+
+        // Supprimer une question
+        function deleteQuestion(questionId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette question?')) {
+                questions = questions.filter(q => q.id !== questionId);
+                saveQuestions();
+                generateQuestionButtons();
+                generateQuestionsList();
+                alert('Question supprimée avec succès!');
+            }
+        }
+
+        // Générer la liste des questions dans l'admin
+        function generateQuestionsList() {
+            questionsList.innerHTML = '';
+            
+            if (questions.length === 0) {
+                questionsList.innerHTML = `
+                    <div class="question-item">
+                        <p style="text-align: center; color: #666; padding: 20px;">
+                            Aucune question pour le moment. Cliquez sur "Ajouter Question" pour commencer.
+                        </p>
+                    </div>
+                `;
+            } else {
+                questions.forEach(question => {
+                    const questionItem = document.createElement('div');
+                    questionItem.className = 'question-item';
+                    
+                    questionItem.innerHTML = `
+                        <div class="question-item-header">
+                            <div class="question-text">${question.question}</div>
+                            <div class="question-item-actions">
+                                <button class="admin-btn btn-primary edit-btn" data-id="${question.id}">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </button>
+                                <button class="admin-btn btn-danger delete-btn" data-id="${question.id}">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </button>
+                            </div>
+                        </div>
+                        <div class="answer-text">${question.response}</div>
+                    `;
+                    
+                    questionsList.appendChild(questionItem);
+                });
+                
+                // Ajouter les événements aux boutons
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const questionId = parseInt(this.dataset.id);
+                        const question = questions.find(q => q.id === questionId);
+                        if (question) showEditForm(question);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const questionId = parseInt(this.dataset.id);
+                        deleteQuestion(questionId);
+                    });
+                });
+            }
+            
+            // Mettre à jour le compteur
+            questionsCount.textContent = `${questions.length} question${questions.length > 1 ? 's' : ''}`;
+        }
     </script>
 </body>
 </html>
