@@ -1442,7 +1442,7 @@
       const paymentRef = db.ref('payments/' + currentUser.uid);
       paymentRef.set({
         plan: selectedPlan,
-        amount: selectedPlan === 'basic' ? 10000 : 25000,
+        amount: selectedPlan === 'basic' ? 10000 : 2000,
         status: 'pending',
         createdAt: Date.now(),
         userId: currentUser.uid,
@@ -2265,3 +2265,4 @@
 </body>
 
 </html>
+
