@@ -939,7 +939,15 @@
         </div>
         
         <div class="payment-plans">
-           
+          <div class="payment-plan" onclick="selectPlan('basic')">
+            <h3 class="plan-name">Basique</h3>
+            <div class="plan-price">10,000 Ar/mois</div>
+            <ul class="plan-features">
+              <li><i class="fas fa-check"></i> Accès à toutes les vidéos</li>
+              <li><i class="fas fa-check"></i> Chat public</li>
+              <li><i class="fas fa-check"></i> Notifications</li>
+            </ul>
+          </div>
           
           <div class="payment-plan" onclick="selectPlan('premium')">
             <h3 class="plan-name">Premium</h3>
@@ -952,7 +960,45 @@
           </div>
         </div>
         
-        <button class="auth-btn" id="paymentBtn" onclick="processPayment()">J'ai payé</button>
+        <!-- Formulaire d'informations de paiement -->
+        <div id="paymentFormContainer" style="display: none; margin-top: 2rem;">
+          <h3 style="margin-bottom: 1rem; color: var(--primary);">Informations de virement</h3>
+          <form id="paymentInfoForm">
+            <div class="form-group">
+              <label class="form-label">1. Numéro de téléphone de l'expéditeur *</label>
+              <input type="text" class="form-input" id="senderPhone" required placeholder="Numéro utilisé pour envoyer l'argent">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">2. Nom complet de l'expéditeur *</label>
+              <input type="text" class="form-input" id="senderName" required placeholder="Nom de la personne qui a envoyé l'argent">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">3. Date d'envoi de l'argent *</label>
+              <input type="date" class="form-input" id="sendDate" required>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">4. Lieu d'envoi *</label>
+              <input type="text" class="form-input" id="sendLocation" required placeholder="Ex: Antananarivo, Tamatave, etc.">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">5. Contact de l'expéditeur</label>
+              <input type="text" class="form-input" id="senderContact" placeholder="Email ou autre numéro de contact">
+              <small style="color: var(--text-muted); display: block; margin-top: 0.25rem;">
+                Pour vous contacter en cas de besoin
+              </small>
+            </div>
+            
+            <button type="submit" class="auth-btn">
+              <i class="fas fa-paper-plane"></i> Envoyer
+            </button>
+          </form>
+        </div>
+        
+        <button class="auth-btn" id="paymentBtn" onclick="showPaymentForm()">J'ai payé</button>
       </div>
     </div>
   </div>
@@ -1046,10 +1092,16 @@
               <thead>
                 <tr>
                   <th>Utilisateur</th>
+                  <th>Email</th>
                   <th>Plan</th>
                   <th>Montant</th>
+                  <th>Numéro expéditeur</th>
+                  <th>Nom expéditeur</th>
+                  <th>Date envoi</th>
+                  <th>Lieu envoi</th>
+                  <th>Contact</th>
+                  <th>Date soumission</th>
                   <th>Statut</th>
-                  <th>Date</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -1427,7 +1479,18 @@
       event.currentTarget.classList.add('selected');
     }
 
-    // Process payment
+    // Afficher le formulaire de paiement
+    function showPaymentForm() {
+      if (!selectedPlan) {
+        alert('Veuillez sélectionner un plan');
+        return;
+      }
+      
+      document.getElementById('paymentBtn').style.display = 'none';
+      document.getElementById('paymentFormContainer').style.display = 'block';
+    }
+
+    // Processus de paiement complet
     function processPayment() {
       if (!selectedPlan) {
         alert('Veuillez sélectionner un plan');
@@ -1439,6 +1502,19 @@
         return;
       }
 
+      // Récupérer les informations du formulaire
+      const senderPhone = document.getElementById('senderPhone').value;
+      const senderName = document.getElementById('senderName').value;
+      const sendDate = document.getElementById('sendDate').value;
+      const sendLocation = document.getElementById('sendLocation').value;
+      const senderContact = document.getElementById('senderContact').value;
+
+      // Validation des champs obligatoires
+      if (!senderPhone || !senderName || !sendDate || !sendLocation) {
+        alert('Veuillez remplir tous les champs obligatoires (*)');
+        return;
+      }
+
       const paymentRef = db.ref('payments/' + currentUser.uid);
       paymentRef.set({
         plan: selectedPlan,
@@ -1446,10 +1522,38 @@
         status: 'pending',
         createdAt: Date.now(),
         userId: currentUser.uid,
-        userName: currentUser.displayName || 'Utilisateur'
+        userName: currentUser.displayName || 'Utilisateur',
+        userEmail: currentUser.email,
+        // Nouvelles informations
+        senderPhone: senderPhone,
+        senderName: senderName,
+        sendDate: sendDate,
+        sendLocation: sendLocation,
+        senderContact: senderContact,
+        paymentDate: new Date().toISOString()
+      }).then(() => {
+        showPage('pendingPage');
+        
+        // Envoyer aussi une copie admin
+        const adminPaymentRef = db.ref('adminPayments').push();
+        adminPaymentRef.set({
+          userId: currentUser.uid,
+          userName: currentUser.displayName || 'Utilisateur',
+          userEmail: currentUser.email,
+          plan: selectedPlan,
+          amount: selectedPlan === 'basic' ? 10000 : 2000,
+          status: 'pending',
+          senderPhone: senderPhone,
+          senderName: senderName,
+          sendDate: sendDate,
+          sendLocation: sendLocation,
+          senderContact: senderContact,
+          submittedAt: Date.now(),
+          createdAt: new Date().toISOString()
+        });
+      }).catch((error) => {
+        alert('Erreur lors de l\'enregistrement du paiement: ' + error.message);
       });
-
-      showPage('pendingPage');
     }
 
     // Setup event listeners
@@ -1460,6 +1564,12 @@
       document.getElementById('profileForm').addEventListener('submit', handleProfileUpdate);
       document.getElementById('adminLoginForm').addEventListener('submit', handleAdminLogin);
       document.getElementById('videoForm').addEventListener('submit', handleAddVideo);
+
+      // Formulaire d'informations de paiement
+      document.getElementById('paymentInfoForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        processPayment();
+      });
 
       // Navigation
       document.querySelectorAll('.nav-link').forEach(link => {
@@ -1535,6 +1645,88 @@
         loadAdminData();
       } else {
         alert('Code d\'accès incorrect');
+      }
+    }
+
+    // Load admin data
+    function loadAdminData() {
+      loadPendingPaymentsAdmin();
+      loadAdminVideos();
+    }
+
+    // Load pending payments for admin
+    function loadPendingPaymentsAdmin() {
+      const paymentsRef = db.ref('payments').orderByChild('status').equalTo('pending');
+      paymentsRef.on('value', (snapshot) => {
+        const payments = snapshot.val();
+        const paymentsTable = document.getElementById('paymentsTable');
+        paymentsTable.innerHTML = '';
+
+        if (!payments) {
+          paymentsTable.innerHTML = '<tr><td colspan="12">Aucun paiement en attente</td></tr>';
+          return;
+        }
+
+        Object.entries(payments).forEach(([userId, payment]) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${escapeHtml(payment.userName || 'Utilisateur')}</td>
+            <td>${escapeHtml(payment.userEmail || 'N/A')}</td>
+            <td>${escapeHtml(payment.plan)}</td>
+            <td>${payment.amount} Ar</td>
+            <td>${escapeHtml(payment.senderPhone || 'N/A')}</td>
+            <td>${escapeHtml(payment.senderName || 'N/A')}</td>
+            <td>${payment.sendDate || 'N/A'}</td>
+            <td>${escapeHtml(payment.sendLocation || 'N/A')}</td>
+            <td>${escapeHtml(payment.senderContact || 'N/A')}</td>
+            <td>${formatTime(payment.createdAt)}</td>
+            <td><span class="status-badge status-pending">En attente</span></td>
+            <td>
+              <button class="auth-btn" onclick="confirmPayment('${userId}')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.5rem;">
+                Confirmer
+              </button>
+              <button class="auth-btn" onclick="rejectPayment('${userId}')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--error);">
+                Rejeter
+              </button>
+            </td>
+          `;
+          paymentsTable.appendChild(row);
+        });
+      });
+    }
+
+    // Confirm payment from admin
+    function confirmPayment(userId) {
+      const paymentRef = db.ref('payments/' + userId);
+      paymentRef.update({
+        status: 'confirmed',
+        confirmedAt: Date.now(),
+        confirmedBy: 'admin'
+      }).then(() => {
+        alert('Paiement confirmé avec succès!');
+        
+        // Create notification for user
+        const notificationRef = db.ref(`notifications/${userId}`).push();
+        notificationRef.set({
+          type: 'payment',
+          text: 'Votre paiement a été confirmé. Vous pouvez maintenant accéder à la plateforme.',
+          timestamp: Date.now(),
+          read: false
+        });
+      });
+    }
+
+    // Reject payment from admin
+    function rejectPayment(userId) {
+      if (confirm('Êtes-vous sûr de vouloir rejeter ce paiement?')) {
+        const paymentRef = db.ref('payments/' + userId);
+        paymentRef.update({
+          status: 'rejected',
+          rejectedAt: Date.now(),
+          rejectedBy: 'admin'
+        }).then(() => {
+          alert('Paiement rejeté!');
+        });
       }
     }
 
@@ -2093,62 +2285,6 @@
       showPage('adminPage');
     }
 
-    function loadAdminData() {
-      loadPendingPayments();
-      loadAdminVideos();
-    }
-
-    function loadPendingPayments() {
-      const paymentsRef = db.ref('payments').orderByChild('status').equalTo('pending');
-      paymentsRef.on('value', (snapshot) => {
-        const payments = snapshot.val();
-        const paymentsTable = document.getElementById('paymentsTable');
-        paymentsTable.innerHTML = '';
-
-        if (!payments) {
-          paymentsTable.innerHTML = '<tr><td colspan="6">Aucun paiement en attente</td></tr>';
-          return;
-        }
-
-        Object.entries(payments).forEach(([paymentId, payment]) => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${escapeHtml(payment.userName)}</td>
-            <td>${escapeHtml(payment.plan)}</td>
-            <td>${payment.amount} Ar</td>
-            <td><span class="status-badge status-pending">En attente</span></td>
-            <td>${formatTime(payment.createdAt)}</td>
-            <td>
-              <button class="auth-btn" onclick="confirmPayment('${paymentId}', '${payment.userId}')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
-                Confirmer
-              </button>
-            </td>
-          `;
-          paymentsTable.appendChild(row);
-        });
-      });
-    }
-
-    function confirmPayment(paymentId, userId) {
-      const paymentRef = db.ref('payments/' + userId);
-      paymentRef.update({
-        status: 'confirmed',
-        confirmedAt: Date.now(),
-        confirmedBy: 'admin'
-      }).then(() => {
-        alert('Paiement confirmé avec succès!');
-        
-        // Create notification for user
-        const notificationRef = db.ref(`notifications/${userId}`).push();
-        notificationRef.set({
-          type: 'payment',
-          text: 'Votre paiement a été confirmé. Vous pouvez maintenant accéder à la plateforme.',
-          timestamp: Date.now(),
-          read: false
-        });
-      });
-    }
-
     // Handle add video
     function handleAddVideo(e) {
       e.preventDefault();
@@ -2263,6 +2399,4 @@
     document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
-
 </html>
-
