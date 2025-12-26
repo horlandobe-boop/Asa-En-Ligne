@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Formation - Mikotse</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #dbeafe;
+      --secondary: #64748b;
+      --accent: #f1f5f9;
+      --background: #f8fafc;
+      --surface: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: all 0.2s ease-in-out;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Page de connexion admin */
+    .admin-login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .admin-login-container {
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .admin-login-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+
+    .admin-logo {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .admin-subtitle {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: var(--transition);
+      background: white;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: var(--accent);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #0da271;
+    }
+
+    .btn-warning {
+      background: var(--warning);
+      color: white;
+    }
+
+    .btn-warning:hover {
+      background: #d97706;
+    }
+
+    .btn-error {
+      background: var(--error);
+      color: white;
+    }
+
+    .btn-error:hover {
+      background: #dc2626;
+    }
+
+    /* Dashboard admin */
+    .admin-dashboard {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header admin */
+    .admin-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 1rem 2rem;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .admin-nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .admin-nav-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .admin-nav-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main content */
+    .admin-main {
+      flex: 1;
+      max-width: 1400px;
+      width: 100%;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    /* Section cards */
+    .section-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .stat-icon {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Formulaire d'ajout */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    textarea.form-input {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    /* Tableau des vidéos */
+    .videos-table-container {
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+
+    .videos-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+    }
+
+    .videos-table th {
+      background: var(--accent);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 2px solid var(--border);
+    }
+
+    .videos-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .videos-table tr:hover {
+      background: var(--accent);
+    }
+
+    .video-title-cell {
+      max-width: 250px;
+    }
+
+    .video-title {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .video-description {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .video-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .video-category {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .video-date {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Preview modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 2rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius);
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--error);
+      background: var(--accent);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .video-preview {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .video-preview iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .admin-main {
+        padding: 0 1rem;
+      }
+      
+      .section-card {
+        padding: 1.5rem;
+      }
+      
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .videos-table {
+        font-size: 0.875rem;
+      }
+      
+      .videos-table th,
+      .videos-table td {
+        padding: 0.75rem 0.5rem;
+      }
+      
+      .admin-header-content {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      
+      .admin-nav {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    /* Alerts */
+    .alert {
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .alert-error {
+      background: #fee2e2;
+      color: #7f1d1d;
+      border: 1px solid #fecaca;
+    }
+
+    .alert-info {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 3rem;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--accent);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      color: var(--border);
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Page de connexion admin -->
+  <div id="loginPage" class="admin-login-page">
+    <div class="admin-login-container">
+      <div class="admin-login-card">
+        <div class="admin-logo">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <h1 class="admin-title">Administration Formation</h1>
+        <p class="admin-subtitle">Accès réservé aux administrateurs</p>
+        
+        <div class="form-group">
+          <label class="form-label">Code d'accès administrateur</label>
+          <input type="password" class="form-input" id="adminCode" placeholder="Entrez le code d'accès" required>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.5rem;">
+            <i class="fas fa-info-circle"></i> Code requis : 080600
+          </p>
+        </div>
+        
+        <button class="btn btn-primary" onclick="verifyAdminCode()">
+          <i class="fas fa-sign-in-alt"></i> Se connecter
+        </button>
+        
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+          <p style="color: var(--text-muted); margin-bottom: 1rem;">Retour aux autres pages :</p>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="index.html" class="btn btn-secondary" style="flex: 1;">
+              <i class="fas fa-home"></i> Accueil Principal
+            </a>
+            <a href="live.html" class="btn btn-secondary" style="flex: 1;">
+              <i class="fas fa-video"></i> Formations Live
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard admin -->
+  <div id="dashboardPage" class="admin-dashboard" style="display: none;">
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="admin-header-content">
+        <div class="admin-brand">
+          <i class="fas fa-user-shield"></i>
+          <span>Panel Admin Formation</span>
+        </div>
+        
+        <div class="admin-nav">
+          <span style="color: rgba(255,255,255,0.8);">
+            <i class="fas fa-user"></i> Admin
+          </span>
+          <a href="live.html" class="admin-nav-btn" target="_blank">
+            <i class="fas fa-eye"></i> Voir les formations
+          </a>
+          <button class="admin-nav-btn" onclick="logoutAdmin()">
+            <i class="fas fa-sign-out-alt"></i> Déconnexion
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="admin-main">
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card fade-in">
+          <div class="stat-icon">
+            <i class="fas fa-video"></i>
+          </div>
+          <div class="stat-value" id="totalVideos">0</div>
+          <div class="stat-label">Vidéos publiées</div>
+        </div>
+        
+        <div class="stat-card fade-in">
+          <div class="stat-icon">
+            <i class="fas fa-eye"></i>
+          </div>
+          <div class="stat-value" id="todayViews">0</div>
+          <div class="stat-label">Vues aujourd'hui</div>
+        </div>
+        
+        <div class="stat-card fade-in">
+          <div class="stat-icon">
+            <i class="fas fa-download"></i>
+          </div>
+          <div class="stat-value" id="totalDownloads">0</div>
+          <div class="stat-label">Téléchargements</div>
+        </div>
+        
+        <div class="stat-card fade-in">
+          <div class="stat-icon">
+            <i class="fas fa-calendar-day"></i>
+          </div>
+          <div class="stat-value" id="lastAdded">0j</div>
+          <div class="stat-label">Dernier ajout</div>
+        </div>
+      </div>
+
+      <!-- Alert messages -->
+      <div id="alertContainer"></div>
+
+      <!-- Section: Ajouter une vidéo -->
+      <div class="section-card fade-in">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-plus-circle"></i> Ajouter une nouvelle vidéo
+          </h2>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary" onclick="resetForm()">
+              <i class="fas fa-redo"></i> Réinitialiser
+            </button>
+            <button class="btn btn-primary" onclick="previewVideo()" id="previewBtn">
+              <i class="fas fa-eye"></i> Prévisualiser
+            </button>
+          </div>
+        </div>
+        
+        <form id="addVideoForm" onsubmit="return false;">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Titre de la vidéo *</label>
+              <input type="text" class="form-input" id="videoTitle" placeholder="Ex: Formation complète sur..." required>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Catégorie *</label>
+              <select class="form-input" id="videoCategory" required>
+                <option value="">Sélectionner une catégorie</option>
+                <option value="formation">Formation complète</option>
+                <option value="tutoriel">Tutoriel</option>
+                <option value="demonstration">Démonstration</option>
+                <option value="interview">Interview</option>
+                <option value="conference">Conférence</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Lien de visionnage (URL) *</label>
+              <input type="url" class="form-input" id="videoUrl" placeholder="https://example.com/video ou https://youtube.com/..." required>
+              <small style="color: var(--text-muted); display: block; margin-top: 0.25rem;">
+                Supporte: YouTube, Vimeo, ou liens MP4 directs
+              </small>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Lien de téléchargement (optionnel)</label>
+              <input type="url" class="form-input" id="videoDownloadUrl" placeholder="https://example.com/video.zip">
+              <small style="color: var(--text-muted); display: block; margin-top: 0.25rem;">
+                Lien direct pour télécharger la vidéo
+              </small>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Lien d'inscription (optionnel)</label>
+              <input type="url" class="form-input" id="videoRegistrationUrl" placeholder="https://example.com/register">
+              <small style="color: var(--text-muted); display: block; margin-top: 0.25rem;">
+                Lien pour s'inscrire à la formation complète
+              </small>
+            </div>
+            
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label">Description de la vidéo</label>
+              <textarea class="form-input" id="videoDescription" rows="4" placeholder="Décrivez le contenu de cette vidéo..."></textarea>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn btn-success" onclick="addVideo()" id="submitBtn">
+              <i class="fas fa-plus"></i> Ajouter la vidéo
+            </button>
+            <button type="button" class="btn btn-warning" onclick="saveAsDraft()" id="draftBtn">
+              <i class="fas fa-save"></i> Sauvegarder comme brouillon
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Section: Gérer les vidéos -->
+      <div class="section-card fade-in">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i class="fas fa-list"></i> Gérer les vidéos existantes
+          </h2>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary" onclick="refreshVideos()">
+              <i class="fas fa-sync-alt"></i> Actualiser
+            </button>
+            <button class="btn btn-error" onclick="deleteSelectedVideos()" id="deleteSelectedBtn" style="display: none;">
+              <i class="fas fa-trash"></i> Supprimer la sélection
+            </button>
+          </div>
+        </div>
+        
+        <div class="videos-table-container" id="videosTableContainer">
+          <!-- Le tableau sera chargé ici dynamiquement -->
+          <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Chargement des vidéos...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal de prévisualisation -->
+  <div id="previewModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="previewTitle">Prévisualisation de la vidéo</h3>
+        <button class="modal-close" onclick="closePreview()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="video-preview" id="videoPreview">
+          <!-- Le lecteur vidéo sera chargé ici -->
+          <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white;">
+            <i class="fas fa-video" style="font-size: 3rem; opacity: 0.5;"></i>
+          </div>
+        </div>
+        
+        <div id="previewDetails">
+          <!-- Les détails seront chargés ici -->
+        </div>
+        
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+          <button class="btn btn-primary" onclick="addVideoFromPreview()">
+            <i class="fas fa-check"></i> Confirmer et ajouter
+          </button>
+          <button class="btn btn-secondary" onclick="closePreview()">
+            <i class="fas fa-times"></i> Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <script>
+    // Configuration Firebase (identique à votre projet principal)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBtq50XttR1S-f9RMo0otxx5jrRiY30QEE",
+      authDomain: "miasamada-4f90a.firebaseapp.com",
+      databaseURL: "https://miasamada-4f90a-default-rtdb.firebaseio.com",
+      projectId: "miasamada-4f90a",
+      storageBucket: "miasamada-4f90a.firebasestorage.app",
+      messagingSenderId: "341483369374",
+      appId: "1:341483369374:web:721451eb0df21d4ef45c8f",
+      measurementId: "G-XTH1TCS8H4"
+    };
+
+    // Initialiser Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Variables globales
+    const ADMIN_CODE = "080600";
+    let selectedVideos = [];
+    let isAdminAuthenticated = false;
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', function() {
+      // Vérifier si l'admin est déjà connecté
+      const adminSession = localStorage.getItem('adminAuthenticated');
+      if (adminSession === 'true') {
+        const savedTime = localStorage.getItem('adminLoginTime');
+        const now = Date.now();
+        // Session valable 8 heures
+        if (now - savedTime < 8 * 60 * 60 * 1000) {
+          isAdminAuthenticated = true;
+          showDashboard();
+        } else {
+          localStorage.removeItem('adminAuthenticated');
+          localStorage.removeItem('adminLoginTime');
+        }
+      }
+
+      // Raccourci clavier pour le code admin
+      document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 'k') {
+          e.preventDefault();
+          if (document.getElementById('adminCode')) {
+            document.getElementById('adminCode').focus();
+          }
+        }
+      });
+
+      // Entrée pour soumettre le code
+      const adminCodeInput = document.getElementById('adminCode');
+      if (adminCodeInput) {
+        adminCodeInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            verifyAdminCode();
+          }
+        });
+      }
+    });
+
+    // Vérifier le code admin
+    function verifyAdminCode() {
+      const code = document.getElementById('adminCode').value;
+      
+      if (code === ADMIN_CODE) {
+        isAdminAuthenticated = true;
+        localStorage.setItem('adminAuthenticated', 'true');
+        localStorage.setItem('adminLoginTime', Date.now().toString());
+        showDashboard();
+      } else {
+        showAlert('Code incorrect. Le code administrateur est 080600', 'error');
+        document.getElementById('adminCode').value = '';
+        document.getElementById('adminCode').focus();
+      }
+    }
+
+    // Afficher le dashboard
+    function showDashboard() {
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('dashboardPage').style.display = 'flex';
+      loadStatistics();
+      loadVideosTable();
+    }
+
+    // Déconnexion admin
+    function logoutAdmin() {
+      isAdminAuthenticated = false;
+      localStorage.removeItem('adminAuthenticated');
+      localStorage.removeItem('adminLoginTime');
+      document.getElementById('dashboardPage').style.display = 'none';
+      document.getElementById('loginPage').style.display = 'flex';
+      document.getElementById('adminCode').value = '';
+      showAlert('Déconnexion réussie', 'success');
+    }
+
+    // Afficher une alerte
+    function showAlert(message, type = 'info') {
+      const alertContainer = document.getElementById('alertContainer');
+      const alertClass = type === 'success' ? 'alert-success' : 
+                        type === 'error' ? 'alert-error' : 'alert-info';
+      const icon = type === 'success' ? 'fa-check-circle' :
+                   type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+      
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert ${alertClass} fade-in`;
+      alertDiv.innerHTML = `
+        <i class="fas ${icon}"></i>
+        <span>${message}</span>
+      `;
+      
+      alertContainer.appendChild(alertDiv);
+      
+      // Supprimer l'alerte après 5 secondes
+      setTimeout(() => {
+        alertDiv.remove();
+      }, 5000);
+    }
+
+    // Charger les statistiques
+    function loadStatistics() {
+      const videosRef = db.ref('formationVideos');
+      videosRef.once('value')
+        .then(snapshot => {
+          const videos = snapshot.val();
+          const videosCount = videos ? Object.keys(videos).length : 0;
+          
+          document.getElementById('totalVideos').textContent = videosCount;
+          
+          // Calculer les vues (simulation)
+          const todayViews = Math.floor(Math.random() * 100) + videosCount * 10;
+          document.getElementById('todayViews').textContent = todayViews.toLocaleString();
+          
+          // Calculer les téléchargements (simulation)
+          const totalDownloads = Math.floor(todayViews * 0.3);
+          document.getElementById('totalDownloads').textContent = totalDownloads.toLocaleString();
+          
+          // Dernier ajout
+          if (videos) {
+            const videosArray = Object.values(videos);
+            const latestVideo = videosArray.reduce((latest, video) => {
+              return video.createdAt > latest.createdAt ? video : latest;
+            });
+            
+            const daysAgo = Math.floor((Date.now() - latestVideo.createdAt) / (1000 * 60 * 60 * 24));
+            document.getElementById('lastAdded').textContent = daysAgo === 0 ? 'Aujourd\'hui' : `${daysAgo}j`;
+          }
+        });
+    }
+
+    // Prévisualiser la vidéo
+    function previewVideo() {
+      const title = document.getElementById('videoTitle').value;
+      const url = document.getElementById('videoUrl').value;
+      const category = document.getElementById('videoCategory').value;
+      const downloadUrl = document.getElementById('videoDownloadUrl').value;
+      const registrationUrl = document.getElementById('videoRegistrationUrl').value;
+      const description = document.getElementById('videoDescription').value;
+      
+      if (!title || !url || !category) {
+        showAlert('Veuillez remplir au moins le titre, l\'URL et la catégorie', 'error');
+        return;
+      }
+      
+      document.getElementById('previewTitle').textContent = title;
+      
+      // Configurer le lecteur vidéo
+      const previewContainer = document.getElementById('videoPreview');
+      let videoHtml = '';
+      
+      if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        let videoId = url.includes('youtube.com') ? url.split('v=')[1] : url.split('/').pop();
+        if (videoId) {
+          videoId = videoId.split('&')[0]; // Nettoyer les paramètres
+          videoHtml = `<iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
+        }
+      } else if (url.includes('vimeo.com')) {
+        const videoId = url.split('/').pop();
+        videoHtml = `<iframe src="https://player.vimeo.com/video/${videoId}" allowfullscreen></iframe>`;
+      } else if (url.includes('.mp4') || url.includes('.webm')) {
+        videoHtml = `<video controls style="width:100%;height:100%;"><source src="${url}"></video>`;
+      } else {
+        videoHtml = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:white;background:#000;">
+          <div style="text-align:center;">
+            <i class="fas fa-external-link-alt" style="font-size:3rem;margin-bottom:1rem;"></i>
+            <p>Lien externe: ${url}</p>
+          </div>
+        </div>`;
+      }
+      
+      previewContainer.innerHTML = videoHtml;
+      
+      // Afficher les détails
+      const previewDetails = document.getElementById('previewDetails');
+      previewDetails.innerHTML = `
+        <h4 style="margin-bottom:0.5rem;">${escapeHtml(title)}</h4>
+        <div style="display:flex;gap:1rem;margin-bottom:1rem;">
+          <span class="video-category">${category}</span>
+          <span style="color:var(--text-muted);font-size:0.875rem;">
+            <i class="far fa-clock"></i> À publier maintenant
+          </span>
+        </div>
+        <p style="margin-bottom:1rem;">${escapeHtml(description || 'Aucune description')}</p>
+        ${downloadUrl ? `<p><strong><i class="fas fa-download"></i> Téléchargement:</strong> ${downloadUrl}</p>` : ''}
+        ${registrationUrl ? `<p><strong><i class="fas fa-user-plus"></i> Inscription:</strong> ${registrationUrl}</p>` : ''}
+      `;
+      
+      // Afficher le modal
+      document.getElementById('previewModal').classList.add('active');
+    }
+
+    // Fermer la prévisualisation
+    function closePreview() {
+      document.getElementById('previewModal').classList.remove('active');
+    }
+
+    // Ajouter une vidéo depuis la prévisualisation
+    function addVideoFromPreview() {
+      addVideo();
+      closePreview();
+    }
+
+    // Ajouter une vidéo
+    function addVideo() {
+      if (!isAdminAuthenticated) {
+        showAlert('Accès administrateur requis', 'error');
+        return;
+      }
+      
+      const title = document.getElementById('videoTitle').value;
+      const url = document.getElementById('videoUrl').value;
+      const category = document.getElementById('videoCategory').value;
+      const downloadUrl = document.getElementById('videoDownloadUrl').value;
+      const registrationUrl = document.getElementById('videoRegistrationUrl').value;
+      const description = document.getElementById('videoDescription').value;
+      
+      if (!title || !url || !category) {
+        showAlert('Veuillez remplir les champs obligatoires (titre, URL, catégorie)', 'error');
+        return;
+      }
+      
+      const videoData = {
+        title: title,
+        url: url,
+        category: category,
+        downloadUrl: downloadUrl || '',
+        registrationUrl: registrationUrl || '',
+        description: description || '',
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        status: 'published',
+        views: 0,
+        downloads: 0
+      };
+      
+      const videoRef = db.ref('formationVideos').push();
+      videoRef.set(videoData)
+        .then(() => {
+          showAlert('Vidéo ajoutée avec succès!', 'success');
+          resetForm();
+          loadStatistics();
+          loadVideosTable();
+          
+          // Animation du bouton
+          const submitBtn = document.getElementById('submitBtn');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML = '<i class="fas fa-check"></i> Ajouté!';
+          submitBtn.style.background = '#10b981';
+          
+          setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.style.background = '';
+          }, 2000);
+        })
+        .catch(error => {
+          showAlert('Erreur: ' + error.message, 'error');
+        });
+    }
+
+    // Sauvegarder comme brouillon
+    function saveAsDraft() {
+      const title = document.getElementById('videoTitle').value;
+      
+      if (!title) {
+        showAlert('Veuillez au moins donner un titre au brouillon', 'error');
+        return;
+      }
+      
+      const videoData = {
+        title: title,
+        url: document.getElementById('videoUrl').value || '',
+        category: document.getElementById('videoCategory').value || 'autre',
+        downloadUrl: document.getElementById('videoDownloadUrl').value || '',
+        registrationUrl: document.getElementById('videoRegistrationUrl').value || '',
+        description: document.getElementById('videoDescription').value || '',
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        status: 'draft'
+      };
+      
+      const videoRef = db.ref('draftVideos').push();
+      videoRef.set(videoData)
+        .then(() => {
+          showAlert('Brouillon sauvegardé avec succès!', 'success');
+          resetForm();
+        })
+        .catch(error => {
+          showAlert('Erreur: ' + error.message, 'error');
+        });
+    }
+
+    // Réinitialiser le formulaire
+    function resetForm() {
+      document.getElementById('addVideoForm').reset();
+      document.getElementById('submitBtn').innerHTML = '<i class="fas fa-plus"></i> Ajouter la vidéo';
+      document.getElementById('submitBtn').style.background = '';
+    }
+
+    // Charger le tableau des vidéos
+    function loadVideosTable() {
+      const container = document.getElementById('videosTableContainer');
+      container.innerHTML = `
+        <div class="loading">
+          <div class="loading-spinner"></div>
+          <p>Chargement des vidéos...</p>
+        </div>
+      `;
+      
+      const videosRef = db.ref('formationVideos');
+      videosRef.once('value')
+        .then(snapshot => {
+          const videos = snapshot.val();
+          
+          if (!videos || Object.keys(videos).length === 0) {
+            container.innerHTML = `
+              <div class="empty-state">
+                <div class="empty-state-icon">
+                  <i class="fas fa-video-slash"></i>
+                </div>
+                <h3>Aucune vidéo disponible</h3>
+                <p>Commencez par ajouter votre première vidéo de formation.</p>
+              </div>
+            `;
+            return;
+          }
+          
+          // Convertir en tableau et trier par date (plus récent d'abord)
+          const videosArray = Object.entries(videos).map(([id, video]) => ({
+            id,
+            ...video
+          })).sort((a, b) => b.createdAt - a.createdAt);
+          
+          let tableHTML = `
+            <table class="videos-table">
+              <thead>
+                <tr>
+                  <th style="width: 40px;">
+                    <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)">
+                  </th>
+                  <th>Titre & Description</th>
+                  <th style="width: 120px;">Catégorie</th>
+                  <th style="width: 150px;">Date</th>
+                  <th style="width: 150px;">Statut</th>
+                  <th style="width: 180px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+          `;
+          
+          videosArray.forEach(video => {
+            const date = new Date(video.createdAt);
+            const formattedDate = date.toLocaleDateString('fr-FR', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
+            });
+            
+            const timeAgo = getTimeAgo(video.createdAt);
+            
+            tableHTML += `
+              <tr>
+                <td>
+                  <input type="checkbox" class="video-checkbox" value="${video.id}" onchange="updateSelectedVideos()">
+                </td>
+                <td class="video-title-cell">
+                  <div class="video-title">${escapeHtml(video.title)}</div>
+                  <div class="video-description">${escapeHtml(video.description || 'Aucune description')}</div>
+                </td>
+                <td>
+                  <span class="video-category">${video.category}</span>
+                </td>
+                <td class="video-meta">
+                  <span class="video-date">${formattedDate}</span>
+                  <small style="color: var(--text-muted);">${timeAgo}</small>
+                </td>
+                <td>
+                  <span style="display:inline-block;padding:0.25rem 0.5rem;background:#d1fae5;color:#065f46;border-radius:4px;font-size:0.75rem;">
+                    <i class="fas fa-check-circle"></i> Publié
+                  </span>
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn btn-secondary" onclick="editVideo('${video.id}')" style="background:var(--accent);color:var(--text);">
+                      <i class="fas fa-edit"></i> Modifier
+                    </button>
+                    <button class="action-btn btn-error" onclick="deleteVideo('${video.id}')">
+                      <i class="fas fa-trash"></i> Supprimer
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          });
+          
+          tableHTML += `
+              </tbody>
+            </table>
+          `;
+          
+          container.innerHTML = tableHTML;
+        })
+        .catch(error => {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <h3>Erreur de chargement</h3>
+              <p>${error.message}</p>
+            </div>
+          `;
+        });
+    }
+
+    // Rafraîchir les vidéos
+    function refreshVideos() {
+      loadVideosTable();
+      showAlert('Liste des vidéos actualisée', 'success');
+    }
+
+    // Sélectionner/désélectionner toutes les vidéos
+    function toggleSelectAll(checkbox) {
+      const videoCheckboxes = document.querySelectorAll('.video-checkbox');
+      videoCheckboxes.forEach(cb => {
+        cb.checked = checkbox.checked;
+      });
+      updateSelectedVideos();
+    }
+
+    // Mettre à jour la liste des vidéos sélectionnées
+    function updateSelectedVideos() {
+      const videoCheckboxes = document.querySelectorAll('.video-checkbox:checked');
+      selectedVideos = Array.from(videoCheckboxes).map(cb => cb.value);
+      
+      const deleteBtn = document.getElementById('deleteSelectedBtn');
+      if (selectedVideos.length > 0) {
+        deleteBtn.style.display = 'block';
+        deleteBtn.innerHTML = `<i class="fas fa-trash"></i> Supprimer (${selectedVideos.length})`;
+      } else {
+        deleteBtn.style.display = 'none';
+      }
+    }
+
+    // Supprimer les vidéos sélectionnées
+    function deleteSelectedVideos() {
+      if (selectedVideos.length === 0) return;
+      
+      if (!confirm(`Êtes-vous sûr de vouloir supprimer ${selectedVideos.length} vidéo(s) ?`)) {
+        return;
+      }
+      
+      let deletedCount = 0;
+      const promises = selectedVideos.map(videoId => {
+        return db.ref(`formationVideos/${videoId}`).remove()
+          .then(() => {
+            deletedCount++;
+          })
+          .catch(error => {
+            console.error('Erreur suppression:', error);
+          });
+      });
+      
+      Promise.all(promises).then(() => {
+        showAlert(`${deletedCount} vidéo(s) supprimée(s) avec succès`, 'success');
+        selectedVideos = [];
+        loadStatistics();
+        loadVideosTable();
+      });
+    }
+
+    // Modifier une vidéo
+    function editVideo(videoId) {
+      const videoRef = db.ref(`formationVideos/${videoId}`);
+      videoRef.once('value')
+        .then(snapshot => {
+          const video = snapshot.val();
+          if (!video) return;
+          
+          // Remplir le formulaire
+          document.getElementById('videoTitle').value = video.title || '';
+          document.getElementById('videoUrl').value = video.url || '';
+          document.getElementById('videoCategory').value = video.category || 'autre';
+          document.getElementById('videoDownloadUrl').value = video.downloadUrl || '';
+          document.getElementById('videoRegistrationUrl').value = video.registrationUrl || '';
+          document.getElementById('videoDescription').value = video.description || '';
+          
+          // Changer le bouton pour la mise à jour
+          const submitBtn = document.getElementById('submitBtn');
+          submitBtn.innerHTML = '<i class="fas fa-save"></i> Mettre à jour';
+          submitBtn.onclick = function() { updateVideo(videoId); };
+          
+          const previewBtn = document.getElementById('previewBtn');
+          previewBtn.innerHTML = '<i class="fas fa-eye"></i> Prévisualiser modifications';
+          
+          showAlert('Vidéo chargée pour modification', 'info');
+          
+          // Défiler vers le formulaire
+          document.getElementById('videoTitle').scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+
+    // Mettre à jour une vidéo
+    function updateVideo(videoId) {
+      const title = document.getElementById('videoTitle').value;
+      const url = document.getElementById('videoUrl').value;
+      const category = document.getElementById('videoCategory').value;
+      const downloadUrl = document.getElementById('videoDownloadUrl').value;
+      const registrationUrl = document.getElementById('videoRegistrationUrl').value;
+      const description = document.getElementById('videoDescription').value;
+      
+      if (!title || !url || !category) {
+        showAlert('Veuillez remplir les champs obligatoires', 'error');
+        return;
+      }
+      
+      const updates = {
+        title: title,
+        url: url,
+        category: category,
+        downloadUrl: downloadUrl || '',
+        registrationUrl: registrationUrl || '',
+        description: description || '',
+        updatedAt: Date.now()
+      };
+      
+      db.ref(`formationVideos/${videoId}`).update(updates)
+        .then(() => {
+          showAlert('Vidéo mise à jour avec succès!', 'success');
+          
+          // Réinitialiser le formulaire
+          resetForm();
+          
+          const submitBtn = document.getElementById('submitBtn');
+          submitBtn.innerHTML = '<i class="fas fa-plus"></i> Ajouter la vidéo';
+          submitBtn.onclick = function() { addVideo(); };
+          
+          const previewBtn = document.getElementById('previewBtn');
+          previewBtn.innerHTML = '<i class="fas fa-eye"></i> Prévisualiser';
+          
+          loadStatistics();
+          loadVideosTable();
+        })
+        .catch(error => {
+          showAlert('Erreur: ' + error.message, 'error');
+        });
+    }
+
+    // Supprimer une vidéo
+    function deleteVideo(videoId) {
+      if (!confirm('Êtes-vous sûr de vouloir supprimer cette vidéo ?')) {
+        return;
+      }
+      
+      db.ref(`formationVideos/${videoId}`).remove()
+        .then(() => {
+          showAlert('Vidéo supprimée avec succès', 'success');
+          loadStatistics();
+          loadVideosTable();
+        })
+        .catch(error => {
+          showAlert('Erreur: ' + error.message, 'error');
+        });
+    }
+
+    // Utilitaires
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function getTimeAgo(timestamp) {
+      const now = Date.now();
+      const diff = now - timestamp;
+      
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+      
+      if (minutes < 60) return `il y a ${minutes} min`;
+      if (hours < 24) return `il y a ${hours} h`;
+      if (days === 1) return 'hier';
+      return `il y a ${days} jours`;
+    }
+
+    // Fermer avec la touche Échap
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePreview();
+      }
+    });
+  </script>
+</body>
+</html>
