@@ -779,6 +779,147 @@
       color: white;
     }
 
+    /* Annonces Section */
+    .annonces-section {
+      margin-bottom: 2rem;
+    }
+
+    .annonce-item {
+      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      transition: var(--transition);
+    }
+
+    .annonce-item:hover {
+      box-shadow: var(--shadow);
+    }
+
+    .annonce-item img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius-sm);
+      margin: 0.5rem 0;
+    }
+
+    .annonce-item ul,
+    .annonce-item ol {
+      padding-left: 2rem;
+      margin: 0.5rem 0;
+    }
+
+    .annonce-item p {
+      margin: 0.5rem 0;
+    }
+
+    .annonce-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .annonce-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .annonce-date {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .annonce-content {
+      line-height: 1.6;
+    }
+
+    .annonce-content[style*="text-align"] {
+      text-align: inherit;
+    }
+
+    .annonce-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .annonce-author {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .annonce-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .annonce-expand-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0.25rem 0.75rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .annonce-delete-btn {
+      background: var(--error);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0.25rem 0.75rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .annonce-expand-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .annonce-delete-btn:hover {
+      background: #dc2626;
+    }
+
+    /* Styles pour les annonces dans l'éditeur */
+    .annonce-content .border {
+      border: 2px solid var(--border) !important;
+      padding: 1rem !important;
+      border-radius: var(--radius-sm) !important;
+      margin: 0.5rem 0 !important;
+    }
+
+    .annonce-content .text-italic {
+      font-style: italic !important;
+    }
+
+    .annonce-content .text-center {
+      text-align: center !important;
+    }
+
+    .annonce-content .text-left {
+      text-align: left !important;
+    }
+
+    .annonce-content .text-right {
+      text-align: right !important;
+    }
+
     /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
@@ -907,6 +1048,22 @@
       .bonus-message {
         font-size: 1rem;
       }
+      
+      .annonce-header {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .annonce-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+      }
+      
+      .annonce-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
     }
   </style>
 </head>
@@ -1027,11 +1184,16 @@
           
           <div class="payment-plan" onclick="selectPlan('premium')">
             <h3 class="plan-name">Premium</h3>
-            <div class="plan-price">2,000 Ar/mois</div>
+            <div class="plan-price">1500 Ar/mois</div>
             <ul class="plan-features">
-              <li><i class="fas fa-check"></i> Tous les avantages Basique</li>
-              <li><i class="fas fa-check"></i> Chat privé illimité</li>
-              <li><i class="fas fa-check"></i> Téléchargement des vidéos</li>
+              <li><i class="fas fa-check"></i> Mahita ireo asa vaovao mivoaka foana</li>
+              <li><i class="fas fa-check"></i> Mahazo bot trading ( ho an'i dreive)</li>
+              <li><i class="fas fa-check"></i> Mahazo fampianarana manokatra compte réseaux sociaux izay ilaina indrindra amin'ny asa ato</li>
+              
+               <li><i class="fas fa-check"></i> Aloavy ny droit de formation dia hahazoana ireo zavatra rehetra ireo ianao .</li>
+               
+                <li><i class="fas fa-check"></i> Alefaso amin'ny laharana mipetraka eo ambony io ny droit, rehefa lasa izany dia Tsindrio ny bokitra " j'ai payé " eto ambany</li>
+                 <li><i class="fas fa-check"></i>Fenoy ny informations an'ilay fandefasana vola nataonao, ary Tsindrio ny bokitra envoyé, ary miandry ny fanamarihana sisa no atao.</li>
             </ul>
           </div>
         </div>
@@ -1149,6 +1311,10 @@
         </div>
         
         <div class="nav-container">
+          <a class="nav-link" href="Annonce.html" target="_blank">
+            <i class="fas fa-bullhorn"></i>
+            Créer Annonce
+          </a>
           <a class="nav-link" href="#" onclick="logout()">
             <i class="fas fa-sign-out-alt"></i>
             Déconnexion Admin
@@ -1247,6 +1413,26 @@
             </div>
           </div>
         </div>
+
+        <div class="admin-section">
+          <h3 class="card-title">Gestion des annonces</h3>
+          <div class="card">
+            <div style="margin-bottom: 1rem;">
+              <a href="Annonce.html" target="_blank" class="auth-btn" style="display: inline-flex; width: auto;">
+                <i class="fas fa-plus"></i>
+                Créer une nouvelle annonce
+              </a>
+            </div>
+            
+            <div id="adminAnnoncesList">
+              <!-- Existing announcements will be loaded here -->
+              <div style="text-align: center; padding: 2rem;">
+                <i class="fas fa-bullhorn" style="font-size: 2rem; color: var(--text-muted);"></i>
+                <p style="margin-top: 1rem; color: var(--text-muted);">Aucune annonce pour le moment</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1267,6 +1453,10 @@
           <a class="nav-link" href="#videos">
             <i class="fas fa-video"></i>
             Travaux
+          </a>
+          <a class="nav-link" href="#annonces">
+            <i class="fas fa-bullhorn"></i>
+            Annonces
           </a>
           <a class="nav-link" href="#chat">
             <i class="fas fa-comments"></i>
@@ -1374,6 +1564,38 @@
             
             <div id="videosList">
               <!-- Videos will be loaded here -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Annonces Section -->
+        <section id="annoncesSection" class="annonces-section" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Annonces</h3>
+              <button class="video-action" onclick="refreshAnnonces()" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">
+                <i class="fas fa-sync-alt"></i>
+                Actualiser
+              </button>
+            </div>
+            
+            <div id="annoncesList" style="max-height: 500px; overflow-y: auto;">
+              <!-- Les annonces seront chargées ici -->
+              <div style="text-align: center; padding: 2rem;">
+                <i class="fas fa-bullhorn" style="font-size: 3rem; color: var(--text-muted);"></i>
+                <p style="margin-top: 1rem; color: var(--text-muted);">Chargement des annonces...</p>
+              </div>
+            </div>
+            
+            <div style="padding: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between;">
+              <button class="auth-btn" onclick="loadMoreAnnonces()" id="loadMoreBtn" style="display: none; padding: 0.5rem 1rem;">
+                <i class="fas fa-chevron-down"></i>
+                Voir plus
+              </button>
+              <button class="auth-btn" onclick="clearOldAnnonces()" style="padding: 0.5rem 1rem; background: var(--error);">
+                <i class="fas fa-trash"></i>
+                Effacer anciennes
+              </button>
             </div>
           </div>
         </section>
@@ -1488,6 +1710,11 @@
     const ADMIN_CODE = "080600";
     const BONUS_END_DATE = new Date('2025-12-25T23:59:59');
     let compressedImageBase64 = null;
+    
+    // Variables pour les annonces
+    let annoncesLimit = 5;
+    let annoncesLoaded = 0;
+    let allAnnonces = [];
 
     // Vérifier si on est dans la période de bonus
     function isBonusPeriod() {
@@ -1804,6 +2031,7 @@
     function loadAdminData() {
       loadPendingPaymentsAdmin();
       loadAdminVideos();
+      loadAdminAnnonces();
     }
 
     // Load pending payments for admin
@@ -1880,6 +2108,64 @@
           alert('Paiement rejeté!');
         });
       }
+    }
+
+    // Load admin annonces
+    function loadAdminAnnonces() {
+      const annoncesRef = db.ref('annonces').orderByChild('timestamp');
+      annoncesRef.on('value', (snapshot) => {
+        const annonces = snapshot.val();
+        const annoncesList = document.getElementById('adminAnnoncesList');
+        annoncesList.innerHTML = '';
+
+        if (!annonces) {
+          annoncesList.innerHTML = `
+            <div style="text-align: center; padding: 2rem;">
+              <i class="fas fa-bullhorn" style="font-size: 2rem; color: var(--text-muted);"></i>
+              <p style="margin-top: 1rem; color: var(--text-muted);">Aucune annonce pour le moment</p>
+            </div>
+          `;
+          return;
+        }
+
+        Object.entries(annonces).forEach(([annonceId, annonce]) => {
+          const annonceElement = document.createElement('div');
+          annonceElement.style.padding = '1rem';
+          annonceElement.style.marginBottom = '1rem';
+          annonceElement.style.border = '1px solid var(--border)';
+          annonceElement.style.borderRadius = 'var(--radius)';
+          annonceElement.style.background = 'var(--surface)';
+          
+          const date = new Date(annonce.date);
+          const formattedDate = date.toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+          
+          annonceElement.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+              <h4 style="color: var(--primary); margin: 0;">${escapeHtml(annonce.titre)}</h4>
+              <small style="color: var(--text-muted);">${formattedDate}</small>
+            </div>
+            <div style="margin-bottom: 1rem; max-height: 200px; overflow-y: auto;">
+              ${annonce.contenu.substring(0, 500)}${annonce.contenu.length > 500 ? '...' : ''}
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <small style="color: var(--text-muted);">
+                <i class="fas fa-user"></i> ${escapeHtml(annonce.auteurNom || 'Admin')}
+              </small>
+              <div>
+                <button class="auth-btn" onclick="deleteAnnonce('${annonceId}')" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--error);">
+                  <i class="fas fa-trash"></i> Supprimer
+                </button>
+              </div>
+            </div>
+          `;
+          annoncesList.appendChild(annonceElement);
+        });
+      });
     }
 
     // Compress and preview image
@@ -2007,6 +2293,9 @@
         case 'videos':
           loadVideos();
           break;
+        case 'annonces':
+          loadAnnonces();
+          break;
         case 'chat':
           loadPublicChat();
           break;
@@ -2023,6 +2312,7 @@
     function setupHomePage() {
       showSection('profile');
       loadVideos();
+      loadAnnonces();
       loadPublicChat();
       loadPrivateChat();
       loadNotifications();
@@ -2200,6 +2490,197 @@
       a.href = url;
       a.download = title + '.mp4';
       a.click();
+    }
+
+    // Load annonces
+    function loadAnnonces() {
+      if (!currentUser) return;
+      
+      const annoncesRef = db.ref('annonces').orderByChild('timestamp').limitToLast(annoncesLimit);
+      annoncesRef.on('value', (snapshot) => {
+        const annonces = snapshot.val();
+        const annoncesList = document.getElementById('annoncesList');
+        
+        if (!annonces) {
+          annoncesList.innerHTML = `
+            <div style="text-align: center; padding: 2rem;">
+              <i class="fas fa-bullhorn" style="font-size: 3rem; color: var(--text-muted);"></i>
+              <p style="margin-top: 1rem; color: var(--text-muted);">Aucune annonce pour le moment</p>
+            </div>
+          `;
+          document.getElementById('loadMoreBtn').style.display = 'none';
+          return;
+        }
+        
+        allAnnonces = Object.entries(annonces).reverse(); // Plus récentes d'abord
+        annoncesLoaded = allAnnonces.length;
+        displayAnnonces(allAnnonces);
+        
+        // Afficher/masquer le bouton "Voir plus"
+        if (Object.keys(annonces).length >= annoncesLimit) {
+          document.getElementById('loadMoreBtn').style.display = 'block';
+        } else {
+          document.getElementById('loadMoreBtn').style.display = 'none';
+        }
+      });
+    }
+
+    // Afficher les annonces
+    function displayAnnonces(annoncesArray) {
+      const annoncesList = document.getElementById('annoncesList');
+      annoncesList.innerHTML = '';
+      
+      if (annoncesArray.length === 0) {
+        annoncesList.innerHTML = `
+          <div style="text-align: center; padding: 2rem;">
+            <i class="fas fa-bullhorn" style="font-size: 3rem; color: var(--text-muted);"></i>
+            <p style="margin-top: 1rem; color: var(--text-muted);">Aucune annonce pour le moment</p>
+          </div>
+        `;
+        return;
+      }
+      
+      annoncesArray.forEach(([annonceId, annonce]) => {
+        const annonceElement = document.createElement('div');
+        annonceElement.className = 'annonce-item';
+        
+        // Formater la date
+        const date = new Date(annonce.date);
+        const formattedDate = date.toLocaleDateString('fr-FR', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        
+        annonceElement.innerHTML = `
+          <div class="annonce-header">
+            <h4 class="annonce-title">${escapeHtml(annonce.titre)}</h4>
+            <div class="annonce-date">${formattedDate}</div>
+          </div>
+          <div class="annonce-content">
+            ${annonce.contenu}
+          </div>
+          <div class="annonce-footer">
+            <div class="annonce-author">
+              <i class="fas fa-user"></i>
+              ${escapeHtml(annonce.auteurNom || 'Administrateur')}
+            </div>
+            <div class="annonce-actions">
+              <button class="annonce-expand-btn" onclick="expandAnnonce('${annonceId}')">
+                <i class="fas fa-expand-alt"></i>
+                Voir plus
+              </button>
+              <button class="annonce-delete-btn" onclick="deleteAnnonce('${annonceId}')">
+                <i class="fas fa-trash"></i>
+                Effacer
+              </button>
+            </div>
+          </div>
+        `;
+        
+        annoncesList.appendChild(annonceElement);
+      });
+    }
+
+    // Charger plus d'annonces
+    function loadMoreAnnonces() {
+      annoncesLimit += 5;
+      loadAnnonces();
+    }
+
+    // Actualiser les annonces
+    function refreshAnnonces() {
+      annoncesLimit = 5;
+      loadAnnonces();
+    }
+
+    // Effacer les anciennes annonces
+    function clearOldAnnonces() {
+      if (!currentUser) return;
+      
+      if (confirm('Êtes-vous sûr de vouloir supprimer les annonces de plus de 30 jours?')) {
+        const annoncesRef = db.ref('annonces');
+        annoncesRef.once('value').then((snapshot) => {
+          const annonces = snapshot.val();
+          if (!annonces) return;
+          
+          const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
+          const updates = {};
+          
+          Object.entries(annonces).forEach(([annonceId, annonce]) => {
+            if (annonce.timestamp < thirtyDaysAgo) {
+              updates[annonceId] = null;
+            }
+          });
+          
+          if (Object.keys(updates).length > 0) {
+            annoncesRef.update(updates).then(() => {
+              alert(`${Object.keys(updates).length} annonces anciennes ont été supprimées.`);
+              loadAnnonces();
+            });
+          } else {
+            alert('Aucune annonce ancienne à supprimer.');
+          }
+        });
+      }
+    }
+
+    // Étendre une annonce
+    function expandAnnonce(annonceId) {
+      const annonceRef = db.ref('annonces/' + annonceId);
+      annonceRef.once('value').then((snapshot) => {
+        const annonce = snapshot.val();
+        if (annonce) {
+          // Ouvrir dans une nouvelle fenêtre ou modal
+          const modal = window.open('', '_blank', 'width=800,height=600');
+          modal.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>${escapeHtml(annonce.titre)}</title>
+              <style>
+                body { font-family: Arial, sans-serif; padding: 2rem; max-width: 800px; margin: 0 auto; }
+                h1 { color: #2563eb; }
+                .date { color: #64748b; margin-bottom: 2rem; }
+                .content { line-height: 1.6; }
+                .content img { max-width: 100%; height: auto; }
+                .author { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; color: #64748b; }
+              </style>
+            </head>
+            <body>
+              <h1>${escapeHtml(annonce.titre)}</h1>
+              <div class="date">${new Date(annonce.date).toLocaleDateString('fr-FR', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}</div>
+              <div class="content">${annonce.contenu}</div>
+              <div class="author">
+                <strong>Auteur:</strong> ${escapeHtml(annonce.auteurNom || 'Administrateur')}
+              </div>
+            </body>
+            </html>
+          `);
+          modal.document.close();
+        }
+      });
+    }
+
+    // Supprimer une annonce
+    function deleteAnnonce(annonceId) {
+      if (!currentUser) return;
+      
+      if (confirm('Êtes-vous sûr de vouloir supprimer cette annonce?')) {
+        const annonceRef = db.ref('annonces/' + annonceId);
+        annonceRef.remove().then(() => {
+          alert('Annonce supprimée avec succès!');
+          loadAnnonces();
+        }).catch((error) => {
+          alert('Erreur: ' + error.message);
+        });
+      }
     }
 
     // Load public chat
@@ -2470,7 +2951,7 @@
           notificationElement.className = `notification-item ${notification.read ? '' : 'unread'}`;
           notificationElement.innerHTML = `
             <div class="notification-icon">
-              <i class="fas fa-${notification.type === 'payment' ? 'credit-card' : 'comment'}"></i>
+              <i class="fas fa-${notification.type === 'payment' ? 'credit-card' : notification.type === 'annonce' ? 'bullhorn' : 'comment'}"></i>
             </div>
             <div class="notification-content">
               <div class="notification-text">${escapeHtml(notification.text)}</div>
