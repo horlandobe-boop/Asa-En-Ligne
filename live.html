@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formation Live - Mikotse</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Styles de base */
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #dbeafe;
+      --secondary: #64748b;
+      --accent: #f1f5f9;
+      --background: #f8fafc;
+      --surface: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: all 0.2s ease-in-out;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Pages */
+    .page {
+      display: none;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* Page de connexion */
+    .auth-container {
+      max-width: 400px;
+      margin: 2rem auto;
+      padding: 2rem;
+    }
+
+    .auth-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+
+    .auth-logo {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .auth-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .auth-btn {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      padding: 0.75rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 1rem;
+    }
+
+    .auth-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .auth-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .auth-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 1rem 1.25rem;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-link.active {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Section Formation */
+    .main-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.25rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Vidéos */
+    .videos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .video-item {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .video-item:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .video-thumbnail {
+      width: 100%;
+      height: 200px;
+      background: #000;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .video-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .video-thumbnail:hover img {
+      transform: scale(1.05);
+    }
+
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.9);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .video-thumbnail:hover .play-button {
+      background: white;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .video-content {
+      padding: 1.5rem;
+    }
+
+    .video-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .video-description {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .video-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .video-action {
+      flex: 1;
+      background: var(--accent);
+      border: none;
+      padding: 0.5rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      font-size: 0.9rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .video-action:hover {
+      background: var(--primary-light);
+    }
+
+    .video-action.download {
+      background: var(--success);
+      color: white;
+    }
+
+    .video-action.download:hover {
+      background: #0da271;
+    }
+
+    .video-action.register {
+      background: var(--primary);
+      color: white;
+    }
+
+    .video-action.register:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Modal vidéo */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--surface);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .close-modal:hover {
+      color: var(--error);
+      background: var(--accent);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .video-player-container {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .video-player {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* Section Admin */
+    .admin-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--border);
+    }
+
+    .admin-form {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    textarea.form-input {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .admin-code-input {
+      max-width: 300px;
+      margin: 1rem 0;
+    }
+
+    .admin-code-note {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Historique vidéos */
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .history-table th,
+    .history-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .history-table th {
+      background: var(--accent);
+      font-weight: 600;
+    }
+
+    .history-table tr:hover {
+      background: var(--accent);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .action-btn {
+      padding: 0.25rem 0.5rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.8rem;
+    }
+
+    .action-btn.edit {
+      background: var(--warning);
+      color: white;
+    }
+
+    .action-btn.delete {
+      background: var(--error);
+      color: white;
+    }
+
+    .action-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .nav-container {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .nav-link {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+      }
+      
+      .videos-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-actions {
+        flex-direction: column;
+      }
+      
+      .modal-content {
+        max-height: 80vh;
+      }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <!-- Page de connexion -->
+  <div id="loginPage" class="page active">
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <i class="fas fa-video"></i>
+        </div>
+        <h1 class="auth-title">Formation Live</h1>
+        <p class="auth-subtitle">Connectez-vous pour accéder aux formations</p>
+        
+        <form id="loginForm">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" id="loginEmail" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Mot de passe</label>
+            <input type="password" class="form-input" id="loginPassword" required>
+          </div>
+          
+          <button type="submit" class="auth-btn">Se connecter</button>
+        </form>
+        
+        <p>Accédez à la <a href="index.html" class="auth-link">page principale</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page d'accueil Formation -->
+  <div id="formationPage" class="page">
+    <header>
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-video"></i>
+          <span>Formation Live</span>
+        </div>
+        
+        <div class="nav-container">
+          <a class="nav-link active" href="#formation">
+            <i class="fas fa-play-circle"></i>
+            Formations
+          </a>
+          <a class="nav-link" href="#admin" id="adminLink">
+            <i class="fas fa-user-shield"></i>
+            Admin
+          </a>
+          <a class="nav-link" href="#" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Déconnexion
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-container">
+      <!-- Section Formation -->
+      <section id="formationSection">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📚 Formations Disponibles</h2>
+            <div class="user-info">
+              <span id="userName"></span>
+            </div>
+          </div>
+          
+          <div class="videos-container" id="videosContainer">
+            <!-- Les vidéos seront chargées ici dynamiquement -->
+            <div style="text-align: center; padding: 3rem; grid-column: 1 / -1;">
+              <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+              <p style="margin-top: 1rem; color: var(--text-muted);">Chargement des formations...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section Admin (cachée par défaut) -->
+      <section id="adminSection" class="admin-section" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🔧 Panel d'Administration</h2>
+          </div>
+          
+          <!-- Code d'accès admin -->
+          <div style="margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1rem;">Accès Administrateur</h3>
+            <div class="form-group">
+              <label class="form-label">Code d'accès administrateur</label>
+              <input type="password" class="form-input admin-code-input" id="adminCode" placeholder="Entrez le code d'accès">
+              <p class="admin-code-note">Code administrateur requis pour accéder à cette section</p>
+              <button class="auth-btn" onclick="verifyAdminCode()" style="width: auto; padding: 0.5rem 1.5rem;">
+                Vérifier le code
+              </button>
+            </div>
+          </div>
+
+          <!-- Formulaire d'ajout de vidéo (caché par défaut) -->
+          <div id="adminFormContainer" style="display: none;">
+            <h3 style="margin-bottom: 1rem;">Ajouter une nouvelle vidéo</h3>
+            <form id="addVideoForm" class="admin-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Titre de la vidéo *</label>
+                  <input type="text" class="form-input" id="videoTitle" required>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Lien de visionnage (URL) *</label>
+                  <input type="url" class="form-input" id="videoUrl" required placeholder="https://example.com/video.mp4">
+                  <small style="color: var(--text-muted); display: block; margin-top: 0.25rem;">
+                    Lien direct de la vidéo ou lien embed (YouTube, Vimeo, etc.)
+                  </small>
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Lien de téléchargement (optionnel)</label>
+                  <input type="url" class="form-input" id="videoDownloadUrl" placeholder="https://example.com/video.zip">
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Lien d'inscription (optionnel)</label>
+                  <input type="url" class="form-input" id="videoRegistrationUrl" placeholder="https://example.com/register">
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Description de la vidéo</label>
+                <textarea class="form-input" id="videoDescription" rows="3" placeholder="Décrivez le contenu de cette vidéo..."></textarea>
+              </div>
+              
+              <button type="submit" class="auth-btn" id="submitVideoBtn">
+                <i class="fas fa-plus"></i> Ajouter la vidéo
+              </button>
+            </form>
+            
+            <!-- Historique des vidéos -->
+            <div style="margin-top: 3rem;">
+              <h3 style="margin-bottom: 1rem;">Historique des vidéos</h3>
+              <div id="videoHistory">
+                <!-- L'historique sera chargé ici -->
+                <p style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                  Aucune vidéo ajoutée pour le moment
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Page de paiement (si utilisateur non payé) -->
+  <div id="paymentPage" class="page">
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <i class="fas fa-credit-card"></i>
+        </div>
+        <h1 class="auth-title">Paiement requis</h1>
+        <p class="auth-subtitle">Veuillez payer les frais de formation pour accéder aux vidéos</p>
+        
+        <div style="text-align: center; margin: 2rem 0;">
+          <i class="fas fa-lock" style="font-size: 3rem; color: var(--warning);"></i>
+        </div>
+        
+        <p>Vous devez payer les frais de formation pour accéder à cette section.</p>
+        
+        <button class="auth-btn" onclick="goToPayment()" style="margin-top: 1.5rem;">
+          <i class="fas fa-external-link-alt"></i>
+          Aller à la page de paiement
+        </button>
+        
+        <p style="margin-top: 1rem;">
+          <a href="#" class="auth-link" onclick="logout()">Se déconnecter</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour visionner une vidéo -->
+  <div id="videoModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalVideoTitle"></h3>
+        <button class="close-modal" onclick="closeVideoModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="video-player-container">
+          <iframe class="video-player" id="modalVideoPlayer" frameborder="0" allowfullscreen></iframe>
+        </div>
+        
+        <div id="modalVideoDescription"></div>
+        
+        <div class="modal-actions">
+          <a class="video-action download" id="modalDownloadBtn" target="_blank">
+            <i class="fas fa-download"></i>
+            Télécharger
+          </a>
+          <a class="video-action register" id="modalRegisterBtn" target="_blank">
+            <i class="fas fa-user-plus"></i>
+            S'inscrire
+          </a>
+          <button class="video-action" onclick="closeVideoModal()">
+            <i class="fas fa-times"></i>
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <script>
+    // Firebase Configuration (identique au code principal)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBtq50XttR1S-f9RMo0otxx5jrRiY30QEE",
+      authDomain: "miasamada-4f90a.firebaseapp.com",
+      databaseURL: "https://miasamada-4f90a-default-rtdb.firebaseio.com",
+      projectId: "miasamada-4f90a",
+      storageBucket: "miasamada-4f90a.firebasestorage.app",
+      messagingSenderId: "341483369374",
+      appId: "1:341483369374:web:721451eb0df21d4ef45c8f",
+      measurementId: "G-XTH1TCS8H4"
+    };
+
+    // Initialiser Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    // Variables globales
+    let currentUser = null;
+    let isAdmin = false;
+    const ADMIN_CODE = "080600";
+    let isEditingVideo = false;
+    let editingVideoId = null;
+
+    // Initialiser l'application
+    function init() {
+      setupEventListeners();
+      checkAuthState();
+      
+      // Vérifier si on a un paramètre de redirection
+      const urlParams = new URLSearchParams(window.location.search);
+      const action = urlParams.get('action');
+      if (action === 'payment') {
+        showPage('paymentPage');
+      }
+    }
+
+    // Vérifier l'état d'authentification
+    function checkAuthState() {
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          currentUser = user;
+          checkUserPaymentStatus(user.uid);
+        } else {
+          showPage('loginPage');
+        }
+      });
+    }
+
+    // Vérifier le statut de paiement de l'utilisateur
+    function checkUserPaymentStatus(userId) {
+      const paymentRef = db.ref('payments/' + userId);
+      const userRef = db.ref('users/' + userId);
+      
+      // Vérifier les deux sources
+      Promise.all([
+        paymentRef.once('value'),
+        userRef.once('value')
+      ]).then(([paymentSnapshot, userSnapshot]) => {
+        const paymentData = paymentSnapshot.val();
+        const userData = userSnapshot.val();
+        
+        // Vérifier si l'utilisateur a payé (statut confirmé) OU a accepté le bonus
+        const hasPaid = paymentData && paymentData.status === 'confirmed';
+        const hasBonus = userData && userData.bonusAccepted;
+        
+        if (hasPaid || hasBonus) {
+          // Vérifier si l'abonnement est toujours valide (30 jours)
+          if (hasPaid && paymentData.confirmedAt) {
+            const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
+            const now = Date.now();
+            
+            if (now - paymentData.confirmedAt < thirtyDaysInMs) {
+              showPage('formationPage');
+              loadUserInfo();
+              loadFormationVideos();
+            } else {
+              showPage('paymentPage');
+            }
+          } else if (hasBonus) {
+            // Vérifier si le bonus est encore valide
+            const now = new Date();
+            const bonusEndDate = new Date('2025-12-25T23:59:59');
+            
+            if (now < bonusEndDate) {
+              showPage('formationPage');
+              loadUserInfo();
+              loadFormationVideos();
+            } else {
+              showPage('paymentPage');
+            }
+          } else {
+            showPage('formationPage');
+            loadUserInfo();
+            loadFormationVideos();
+          }
+        } else {
+          showPage('paymentPage');
+        }
+      }).catch((error) => {
+        console.error('Erreur:', error);
+        showPage('paymentPage');
+      });
+    }
+
+    // Configurer les écouteurs d'événements
+    function setupEventListeners() {
+      // Formulaire de connexion
+      document.getElementById('loginForm').addEventListener('submit', handleLogin);
+      
+      // Formulaire d'ajout de vidéo
+      document.getElementById('addVideoForm').addEventListener('submit', handleAddVideo);
+      
+      // Navigation
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = e.currentTarget.getAttribute('href').substring(1);
+          showSection(target);
+        });
+      });
+    }
+
+    // Gérer la connexion
+    function handleLogin(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          currentUser = userCredential.user;
+          checkUserPaymentStatus(currentUser.uid);
+        })
+        .catch((error) => {
+          alert('Erreur lors de la connexion: ' + error.message);
+        });
+    }
+
+    // Afficher une page
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      document.getElementById(pageId).classList.add('active');
+    }
+
+    // Afficher une section
+    function showSection(sectionId) {
+      if (sectionId === 'admin' && !isAdmin) {
+        alert('Accès administrateur requis');
+        document.getElementById('adminLink').classList.remove('active');
+        document.querySelector('[href="#formation"]').classList.add('active');
+        return;
+      }
+      
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      document.querySelector(`[href="#${sectionId}"]`).classList.add('active');
+      
+      if (sectionId === 'formation') {
+        document.getElementById('formationSection').style.display = 'block';
+        document.getElementById('adminSection').style.display = 'none';
+      } else if (sectionId === 'admin') {
+        document.getElementById('formationSection').style.display = 'none';
+        document.getElementById('adminSection').style.display = 'block';
+      }
+    }
+
+    // Charger les informations utilisateur
+    function loadUserInfo() {
+      if (!currentUser) return;
+      
+      const userRef = db.ref('users/' + currentUser.uid);
+      userRef.once('value').then((snapshot) => {
+        const userData = snapshot.val();
+        if (userData && userData.name) {
+          document.getElementById('userName').textContent = userData.name;
+        }
+      });
+    }
+
+    // Charger les vidéos de formation
+    function loadFormationVideos() {
+      if (!currentUser) return;
+      
+      const videosRef = db.ref('formationVideos').orderByChild('createdAt');
+      videosRef.on('value', (snapshot) => {
+        const videos = snapshot.val();
+        const videosContainer = document.getElementById('videosContainer');
+        videosContainer.innerHTML = '';
+        
+        if (!videos) {
+          videosContainer.innerHTML = `
+            <div style="text-align: center; padding: 3rem; grid-column: 1 / -1;">
+              <i class="fas fa-video-slash" style="font-size: 2rem; color: var(--text-muted);"></i>
+              <p style="margin-top: 1rem; color: var(--text-muted);">Aucune vidéo de formation disponible</p>
+            </div>
+          `;
+          return;
+        }
+        
+        Object.entries(videos).forEach(([videoId, video]) => {
+          const videoElement = document.createElement('div');
+          videoElement.className = 'video-item fade-in';
+          
+          // Générer une miniature (utiliser une image par défaut ou extraire de YouTube)
+          let thumbnail = 'https://via.placeholder.com/300x200?text=Formation';
+          if (video.url.includes('youtube.com') || video.url.includes('youtu.be')) {
+            let videoCode = video.url.split('v=')[1];
+            if (!videoCode && video.url.includes('youtu.be')) {
+              videoCode = video.url.split('/').pop();
+            }
+            if (videoCode) {
+              thumbnail = `https://img.youtube.com/vi/${videoCode}/hqdefault.jpg`;
+            }
+          }
+          
+          videoElement.innerHTML = `
+            <div class="video-thumbnail" onclick="playVideo('${videoId}')">
+              <img src="${thumbnail}" alt="${video.title}">
+              <div class="play-button">
+                <i class="fas fa-play"></i>
+              </div>
+            </div>
+            <div class="video-content">
+              <h3 class="video-title">${escapeHtml(video.title)}</h3>
+              <p class="video-description">${escapeHtml(video.description || 'Aucune description')}</p>
+              <div class="video-actions">
+                <button class="video-action" onclick="playVideo('${videoId}')">
+                  <i class="fas fa-play"></i> Regarder
+                </button>
+                ${video.downloadUrl ? 
+                  `<a href="${video.downloadUrl}" class="video-action download" target="_blank">
+                    <i class="fas fa-download"></i> Télécharger
+                  </a>` : ''
+                }
+                ${video.registrationUrl ? 
+                  `<a href="${video.registrationUrl}" class="video-action register" target="_blank">
+                    <i class="fas fa-user-plus"></i> S'inscrire
+                  </a>` : ''
+                }
+              </div>
+            </div>
+          `;
+          
+          videosContainer.appendChild(videoElement);
+        });
+      });
+    }
+
+    // Jouer une vidéo
+    function playVideo(videoId) {
+      const videoRef = db.ref('formationVideos/' + videoId);
+      videoRef.once('value').then((snapshot) => {
+        const video = snapshot.val();
+        if (!video) return;
+        
+        document.getElementById('modalVideoTitle').textContent = video.title;
+        document.getElementById('modalVideoDescription').innerHTML = `
+          <p>${escapeHtml(video.description || '')}</p>
+          <p><small>Ajoutée le ${new Date(video.createdAt).toLocaleDateString('fr-FR')}</small></p>
+        `;
+        
+        // Déterminer l'URL de la vidéo pour l'iframe
+        let videoUrl = video.url;
+        if (video.url.includes('youtube.com') || video.url.includes('youtu.be')) {
+          let videoCode = video.url.split('v=')[1];
+          if (!videoCode && video.url.includes('youtu.be')) {
+            videoCode = video.url.split('/').pop();
+          }
+          if (videoCode) {
+            // Nettoyer les paramètres supplémentaires
+            videoCode = videoCode.split('&')[0];
+            videoUrl = `https://www.youtube.com/embed/${videoCode}`;
+          }
+        } else if (video.url.includes('vimeo.com')) {
+          const videoCode = video.url.split('/').pop();
+          videoUrl = `https://player.vimeo.com/video/${videoCode}`;
+        } else if (video.url.includes('.mp4') || video.url.includes('.webm')) {
+          // C'est un fichier vidéo direct
+          videoUrl = video.url;
+          document.getElementById('modalVideoPlayer').src = '';
+          document.getElementById('modalVideoPlayer').src = video.url;
+          document.getElementById('modalVideoPlayer').controls = true;
+        }
+        
+        document.getElementById('modalVideoPlayer').src = videoUrl;
+        
+        // Configurer les boutons d'action
+        const downloadBtn = document.getElementById('modalDownloadBtn');
+        const registerBtn = document.getElementById('modalRegisterBtn');
+        
+        if (video.downloadUrl) {
+          downloadBtn.href = video.downloadUrl;
+          downloadBtn.style.display = 'flex';
+        } else {
+          downloadBtn.style.display = 'none';
+        }
+        
+        if (video.registrationUrl) {
+          registerBtn.href = video.registrationUrl;
+          registerBtn.style.display = 'flex';
+        } else {
+          registerBtn.style.display = 'none';
+        }
+        
+        // Afficher le modal
+        document.getElementById('videoModal').classList.add('active');
+      });
+    }
+
+    // Fermer le modal vidéo
+    function closeVideoModal() {
+      document.getElementById('videoModal').classList.remove('active');
+      document.getElementById('modalVideoPlayer').src = '';
+    }
+
+    // Vérifier le code administrateur
+    function verifyAdminCode() {
+      const code = document.getElementById('adminCode').value;
+      
+      if (code === ADMIN_CODE) {
+        isAdmin = true;
+        document.getElementById('adminFormContainer').style.display = 'block';
+        loadVideoHistory();
+        showSection('admin');
+        alert('Code administrateur correct. Accès autorisé.');
+      } else {
+        alert('Code administrateur incorrect.');
+      }
+    }
+
+    // Gérer l'ajout d'une vidéo
+    function handleAddVideo(e) {
+      e.preventDefault();
+      
+      if (!isAdmin) {
+        alert('Accès administrateur requis');
+        return;
+      }
+      
+      const title = document.getElementById('videoTitle').value;
+      const url = document.getElementById('videoUrl').value;
+      const downloadUrl = document.getElementById('videoDownloadUrl').value;
+      const registrationUrl = document.getElementById('videoRegistrationUrl').value;
+      const description = document.getElementById('videoDescription').value;
+      
+      if (!title || !url) {
+        alert('Le titre et le lien de visionnage sont obligatoires');
+        return;
+      }
+      
+      const videoData = {
+        title: title,
+        url: url,
+        downloadUrl: downloadUrl || null,
+        registrationUrl: registrationUrl || null,
+        description: description || '',
+        createdAt: Date.now(),
+        addedBy: currentUser.uid
+      };
+      
+      const videoRef = isEditingVideo ? 
+        db.ref('formationVideos/' + editingVideoId) :
+        db.ref('formationVideos').push();
+      
+      videoRef.set(videoData)
+        .then(() => {
+          if (isEditingVideo) {
+            alert('Vidéo modifiée avec succès!');
+            isEditingVideo = false;
+            editingVideoId = null;
+            document.getElementById('submitVideoBtn').innerHTML = '<i class="fas fa-plus"></i> Ajouter la vidéo';
+          } else {
+            alert('Vidéo ajoutée avec succès!');
+          }
+          
+          // Réinitialiser le formulaire
+          document.getElementById('addVideoForm').reset();
+          
+          // Recharger l'historique
+          loadVideoHistory();
+          
+          // Recharger les vidéos si on est sur la page formation
+          if (document.getElementById('formationSection').style.display !== 'none') {
+            loadFormationVideos();
+          }
+        })
+        .catch((error) => {
+          alert('Erreur: ' + error.message);
+        });
+    }
+
+    // Charger l'historique des vidéos
+    function loadVideoHistory() {
+      if (!isAdmin) return;
+      
+      const videosRef = db.ref('formationVideos').orderByChild('createdAt');
+      videosRef.on('value', (snapshot) => {
+        const videos = snapshot.val();
+        const historyContainer = document.getElementById('videoHistory');
+        
+        if (!videos) {
+          historyContainer.innerHTML = `
+            <p style="text-align: center; padding: 2rem; color: var(--text-muted);">
+              Aucune vidéo ajoutée pour le moment
+            </p>
+          `;
+          return;
+        }
+        
+        let html = `
+          <div class="card">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Titre</th>
+                  <th>Date d'ajout</th>
+                  <th>Lien visionnage</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+        
+        Object.entries(videos).forEach(([videoId, video]) => {
+          const date = new Date(video.createdAt);
+          const formattedDate = date.toLocaleDateString('fr-FR');
+          
+          html += `
+            <tr>
+              <td>${escapeHtml(video.title)}</td>
+              <td>${formattedDate}</td>
+              <td>
+                <a href="${video.url}" target="_blank" style="color: var(--primary);">
+                  <i class="fas fa-external-link-alt"></i> Voir
+                </a>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="action-btn edit" onclick="editVideo('${videoId}')">
+                    <i class="fas fa-edit"></i> Modifier
+                  </button>
+                  <button class="action-btn delete" onclick="deleteVideo('${videoId}')">
+                    <i class="fas fa-trash"></i> Supprimer
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        });
+        
+        html += `
+              </tbody>
+            </table>
+          </div>
+        `;
+        
+        historyContainer.innerHTML = html;
+      });
+    }
+
+    // Modifier une vidéo
+    function editVideo(videoId) {
+      const videoRef = db.ref('formationVideos/' + videoId);
+      videoRef.once('value').then((snapshot) => {
+        const video = snapshot.val();
+        if (!video) return;
+        
+        isEditingVideo = true;
+        editingVideoId = videoId;
+        
+        document.getElementById('videoTitle').value = video.title || '';
+        document.getElementById('videoUrl').value = video.url || '';
+        document.getElementById('videoDownloadUrl').value = video.downloadUrl || '';
+        document.getElementById('videoRegistrationUrl').value = video.registrationUrl || '';
+        document.getElementById('videoDescription').value = video.description || '';
+        
+        document.getElementById('submitVideoBtn').innerHTML = '<i class="fas fa-save"></i> Enregistrer les modifications';
+        
+        // Scroller vers le formulaire
+        document.getElementById('videoTitle').scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    // Supprimer une vidéo
+    function deleteVideo(videoId) {
+      if (!isAdmin) return;
+      
+      if (confirm('Êtes-vous sûr de vouloir supprimer cette vidéo?')) {
+        db.ref('formationVideos/' + videoId).remove()
+          .then(() => {
+            alert('Vidéo supprimée avec succès!');
+            loadVideoHistory();
+            loadFormationVideos();
+          })
+          .catch((error) => {
+            alert('Erreur: ' + error.message);
+          });
+      }
+    }
+
+    // Aller à la page de paiement
+    function goToPayment() {
+      // Rediriger vers la page principale pour le paiement
+      window.location.href = 'index.html?page=payment';
+    }
+
+    // Déconnexion
+    function logout() {
+      auth.signOut().then(() => {
+        currentUser = null;
+        isAdmin = false;
+        showPage('loginPage');
+      });
+    }
+
+    // Échapper le HTML pour la sécurité
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Initialiser l'application quand le DOM est chargé
+    document.addEventListener('DOMContentLoaded', init);
+
+    // Gérer la fermeture du modal avec la touche Échap
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeVideoModal();
+      }
+    });
+  </script>
+</body>
+</html>
